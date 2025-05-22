@@ -54,37 +54,51 @@ function onScanSuccess(decodedText) {
 
 async function startScanner() {
     try {
-    html5QrCode = new Html5Qrcode('reader');
-    const cams = await Html5Qrcode.getCameras();
-    
-    if (!cams.length) throw new Error("No cameras found");
-
-    // Try to find the back-facing one
-    const backCam = cams.find(c => c.label.toLowerCase().includes('back') || c.label.toLowerCase().includes('environment'));
-    const camId = backCam ? backCam.id : cams[0].id;
-
-    await html5QrCode.start(
-        camId,
+      html5QrCode = new Html5Qrcode('reader');
+  
+      // Use a proper facingMode constraint – works on every phone
+      await html5QrCode.start(
+        { facingMode: { exact: "environment" } },   // back camera
         { fps: 12, qrbox: 250 },
         onScanSuccess
-    );
+      );
     } catch (err) {
-    alert('Camera error: ' + err.message);
-    console.error(err);
+      // Fallback if the exact constraint fails (older Androids)
+      if (err.name === "OverconstrainedError") {
+        await html5QrCode.start(
+          { facingMode: "environment" },
+          { fps: 12, qrbox: 250 },
+          onScanSuccess
+        );
+      } else if (err.name === "NotAllowedError") {
+        alert("Camera permission denied — enable it in browser settings.");
+      } else if (err.name === "NotFoundError") {
+        alert("No camera found on this device.");
+      } else {
+        alert("Camera error: " + err.message);
+      }
+      console.error(err);
     }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('[data-mode]').forEach(button => {
-        button.addEventListener('click', () => {
-            const modeValue = button.getAttribute('data-mode');
-            setMode(modeValue);
-        });
+  }
+  
+  /* ───────────────────────── user-gesture wiring ───────────────────────── */
+  document.addEventListener('DOMContentLoaded', () => {
+    const startBtn  = document.getElementById('startBtn');
+    const controls  = document.querySelector('.controls');
+    const readerBox = document.getElementById('reader');
+  
+    startBtn.addEventListener('click', async () => {
+      startBtn.disabled = true;
+      await startScanner();          // runs inside the tap handler → allowed
+      startBtn.style.display = 'none';
+      controls.style.display = 'flex';
+      readerBox.style.display = 'block';
     });
-
-    // Start the scanner AFTER DOM is ready
-    startScanner();
-});
+  
+    document.querySelectorAll('[data-mode]').forEach(b =>
+      b.addEventListener('click', () => setMode(b.dataset.mode))
+    );
+  });  
 
 window.setMode = setMode;
 //window.addEventListener('load', startScanner);

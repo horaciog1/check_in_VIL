@@ -20,17 +20,21 @@
 <body>
   <div class="card">
     <h1>Summer Camp Scanner</h1>
-
-    <div id="status">Select a mode to begin</div>
-
-    <div class="controls">
-      <button class="btn" data-mode="checkin">Check In</button>
-      <button class="btn" data-mode="checkout">Check Out</button>
-      <button class="btn" data-mode="points">+1 Point</button>
+  
+    <div id="status">Tap <strong>Start</strong>, then choose a mode</div>
+  
+    <!-- NEW -->
+    <button id="startBtn" class="btn primary">Start scanning</button>
+  
+    <div class="controls" style="display:none">
+      <button class="btn" data-mode="checkin">Check&nbsp;In</button>
+      <button class="btn" data-mode="checkout">Check&nbsp;Out</button>
+      <button class="btn" data-mode="points">+1&nbsp;Point</button>
     </div>
-
-    <div id="reader"></div>
+  
+    <div id="reader" style="display:none"></div>
   </div>
+  
   <script src="index.js" defer></script>
 </body>
 </html>
