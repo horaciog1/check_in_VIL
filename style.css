@@ -74,18 +74,17 @@ h1 {
 }
 
 /* === QR reader box === */
+/* --- mobile fix: ensure video renders & fills the box --- */
 #reader {
-    margin: 0 auto;
     width: 320px;
-    height: 320px;
-    border-radius: 0.75rem;
-    overflow: hidden;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-  }
+    height: 320px;          /* keep or switch to aspect-ratio if you like */
+    margin: 1rem auto;      /* center under the card */
+}
   
-
 #reader video {
     width: 100%;
     height: 100%;
-    object-fit: cover;   /* keeps aspect-ratio on phones */
-  }
+    object-fit: cover;
+    /* playsinline comes from html5-qrcode, but this guarantees it */
+    playsinline: true;
+}

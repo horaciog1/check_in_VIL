@@ -18,23 +18,22 @@
 
 </head>
 <body>
-  <div class="card">
+  <div class="card" id="uiCard">
     <h1>Summer Camp Scanner</h1>
-  
     <div id="status">Tap <strong>Start</strong>, then choose a mode</div>
-  
-    <!-- NEW -->
     <button id="startBtn" class="btn primary">Start scanning</button>
-  
+
     <div class="controls" style="display:none">
       <button class="btn" data-mode="checkin">Check&nbsp;In</button>
       <button class="btn" data-mode="checkout">Check&nbsp;Out</button>
       <button class="btn" data-mode="points">+1&nbsp;Point</button>
     </div>
-  
-    <div id="reader" style="display:none"></div>
   </div>
-  
+
+  <!-- Put reader *after* the blurred card -->
+  <div id="reader" style="display:none"></div>
+
   <script src="index.js" defer></script>
 </body>
+
 </html>
