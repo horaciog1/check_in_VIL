@@ -156,14 +156,24 @@
       try {
         html5QrCode = new Html5Qrcode('reader');
         const cams = await Html5Qrcode.getCameras();
-        const camId = cams[0]?.id;
-        await html5QrCode.start(camId, { fps: 12, qrbox: 250 }, onScanSuccess);
+        
+        if (!cams.length) throw new Error("No cameras found");
+
+        // Try to find the back-facing one
+        const backCam = cams.find(c => c.label.toLowerCase().includes('back') || c.label.toLowerCase().includes('environment'));
+        const camId = backCam ? backCam.id : cams[0].id;
+
+        await html5QrCode.start(
+          camId,
+          { fps: 12, qrbox: 250 },
+          onScanSuccess
+        );
       } catch (err) {
         alert('Camera error: ' + err.message);
         console.error(err);
       }
     }
-
+    
     window.addEventListener('load', startScanner);
   </script>
 </body>
