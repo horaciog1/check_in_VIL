@@ -60,3 +60,5 @@ async function startScanner() {
 }
 
 window.addEventListener('load', startScanner);
+window.setMode = setMode;
+//window.givePoint = givePoint;
