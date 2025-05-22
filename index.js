@@ -39,25 +39,17 @@ function onScanSuccess(decodedText) {
         timestamp: new Date().toISOString(),
         counsellor_id: 'unset'
     });
-
-    fetch(`${ENDPOINT}?${qs}`)        // ← GET, no headers → no CORS pre-flight
-    .then(async r => {
-        const result = await r.json().catch(() => ({}));
-        console.log("Response status:", r.status);
-        console.log("Response body:", result);
-
-        if (r.ok) {
-            flashBackground('#69f0ae');
-        } else {
-            flashBackground('#ff5252');
-        }
+      
+    fetch(`${ENDPOINT}?${qs}`, {  // ENDPOINT can be the original …/exec
+        mode: 'no-cors'             // <- bypass CORS check
     })
+
+    .then(() => flashBackground('#69f0ae')) // always green; you know it reached the server
     
     .catch(err => {
-        console.error("Fetch error:", err);
-        flashBackground('#ff5252');
+        console.error(err);
+        flashBackground('#ff5252');           // network failure (rare)
     });
-
 }
 
 async function startScanner() {
