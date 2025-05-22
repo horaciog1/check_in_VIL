@@ -55,19 +55,19 @@ function onScanSuccess(decodedText) {
 async function startScanner() {
     try {
       html5QrCode = new Html5Qrcode('reader');
-  
-      // Use a proper facingMode constraint – works on every phone
+
+      const qrSide = Math.min(window.innerWidth, 300) * 0.7;
+
       await html5QrCode.start(
-        { facingMode: { exact: "environment" } },   // back camera
-        { fps: 12, qrbox: 250 },
+        { facingMode: { exact: "environment" } },
+        { fps: 12, qrbox: qrSide },
         onScanSuccess
       );
     } catch (err) {
-      // Fallback if the exact constraint fails (older Androids)
       if (err.name === "OverconstrainedError") {
         await html5QrCode.start(
           { facingMode: "environment" },
-          { fps: 12, qrbox: 250 },
+          { fps: 12, qrbox: qrSide },
           onScanSuccess
         );
       } else if (err.name === "NotAllowedError") {
