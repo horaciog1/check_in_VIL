@@ -20,21 +20,31 @@ function flashBackground(color) {
 
 function onScanSuccess(decodedText) {
     if (!mode) { flashBackground('#ff5252'); return; }
-    const payload = {
-    student_id: decodedText.trim(),
-    type: mode,
-    timestamp: new Date().toISOString(),
-    counsellor_id: 'unset' // replace with auth email later
-    };
 
-    fetch(ENDPOINT, {
-        method: 'POST',
-        body: JSON.stringify(payload)
-    })
+    // const payload = {
+    // student_id: decodedText.trim(),
+    // type: mode,
+    // timestamp: new Date().toISOString(),
+    // counsellor_id: 'unset' // replace with auth email later
+    // };
+
+    // fetch(ENDPOINT, {
+    //     method: 'POST',
+    //     body: JSON.stringify(payload)
+    // })
+    // --- build query string for a GET ---
+    const qs = new URLSearchParams({
+        student_id: decodedText.trim(),
+        type: mode,
+        timestamp: new Date().toISOString(),
+        counsellor_id: 'unset'
+    });
+
+    fetch(`${ENDPOINT}?${qs}`)        // ← GET, no headers → no CORS pre-flight
     .then(async r => {
-    const result = await r.json().catch(() => ({}));
-    console.log("Response status:", r.status);
-    console.log("Response body:", result);
+        const result = await r.json().catch(() => ({}));
+        console.log("Response status:", r.status);
+        console.log("Response body:", result);
 
         if (r.ok) {
             flashBackground('#69f0ae');
@@ -42,6 +52,7 @@ function onScanSuccess(decodedText) {
             flashBackground('#ff5252');
         }
     })
+    
     .catch(err => {
         console.error("Fetch error:", err);
         flashBackground('#ff5252');
