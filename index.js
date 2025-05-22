@@ -59,6 +59,18 @@ async function startScanner() {
     }
 }
 
-window.addEventListener('load', startScanner);
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('[data-mode]').forEach(button => {
+        button.addEventListener('click', () => {
+            const modeValue = button.getAttribute('data-mode');
+            setMode(modeValue);
+        });
+    });
+
+    // Start the scanner AFTER DOM is ready
+    startScanner();
+});
+
 window.setMode = setMode;
+//window.addEventListener('load', startScanner);
 //window.givePoint = givePoint;
