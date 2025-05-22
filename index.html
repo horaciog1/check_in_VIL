@@ -5,97 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Summer Camp Attendance</title>
 
+  <link rel="stylesheet" href="style.css">
+
   <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
 
   <!-- QR‑scanner library (pure JS) -->
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
-  <style>
-    /* === Global reset & core layout === */
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; }
-    body {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: "Poppins", sans-serif;
-      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-      color: #333;
-    }
-
-    /* === Glassmorphic card === */
-    .card {
-      width: 90%;
-      max-width: 400px;
-      background: rgba(255, 255, 255, 0.25);
-      border-radius: 1.25rem;
-      backdrop-filter: blur(16px) saturate(180%);
-      -webkit-backdrop-filter: blur(16px) saturate(180%);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      padding: 2rem 1.5rem 2.5rem;
-      box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
-      text-align: center;
-    }
-
-    h1 {
-      font-size: 1.6rem;
-      font-weight: 600;
-      margin-bottom: 1.25rem;
-      color: #ffffff;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-
-    /* === Button styling === */
-    .controls {
-      display: flex;
-      justify-content: center;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-      margin-bottom: 1.25rem;
-    }
-
-    .btn {
-      flex: 1 1 30%;
-      min-width: 100px;
-      font-size: 0.95rem;
-      font-weight: 500;
-      padding: 0.6rem 0.9rem;
-      color: #fff;
-      background: rgba(255, 255, 255, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.35);
-      border-radius: 0.75rem;
-      cursor: pointer;
-      transition: transform 0.15s ease, background 0.15s ease;
-    }
-
-    .btn:hover {
-      background: rgba(255, 255, 255, 0.3);
-      transform: translateY(-2px);
-    }
-
-    .btn:active {
-      transform: translateY(0);
-    }
-
-    /* === Status text === */
-    #status {
-      font-weight: 500;
-      font-size: 1rem;
-      color: #ffffff;
-      margin-bottom: 0.75rem;
-      min-height: 1.4rem;
-    }
-
-    /* === QR reader box === */
-    #reader {
-      margin: 0 auto;
-      width: 320px;
-      border-radius: 0.75rem;
-      overflow: hidden;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-    }
-  </style>
 </head>
 <body>
   <div class="card">
@@ -111,70 +28,6 @@
 
     <div id="reader"></div>
   </div>
-
-  <script>
-    /* === CONFIG === */
-    const ENDPOINT = "https://script.google.com/macros/s/AKfycby6jIMM08QyB2_MhUqxD1uiD5IumluQOdR_m1tGRZZzlFuZ5bJooPLdPWajefYNav2o/exec"; // replace!
-    /* =============== */
-
-    let mode = null;
-    let html5QrCode;
-
-    function setMode(m) {
-      mode = m;
-      const pretty = m === 'checkin' ? 'Check In' : m === 'checkout' ? 'Check Out' : '+1 Point';
-      document.getElementById('status').innerText = `Mode: ${pretty}`;
-      flashBackground('#00e676');
-    }
-
-    function flashBackground(color) {
-      const original = document.body.style.background;
-      document.body.style.background = color;
-      setTimeout(() => (document.body.style.background = ''), 180);
-    }
-
-    function onScanSuccess(decodedText) {
-      if (!mode) { flashBackground('#ff5252'); return; }
-      const payload = {
-        student_id: decodedText.trim(),
-        type: mode,
-        timestamp: new Date().toISOString(),
-        counsellor_id: 'unset' // replace with auth email later
-      };
-
-      fetch(ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      }).then(r => {
-        if (r.ok) flashBackground('#69f0ae');
-        else flashBackground('#ff5252');
-      }).catch(() => flashBackground('#ff5252'));
-    }
-
-    async function startScanner() {
-      try {
-        html5QrCode = new Html5Qrcode('reader');
-        const cams = await Html5Qrcode.getCameras();
-        
-        if (!cams.length) throw new Error("No cameras found");
-
-        // Try to find the back-facing one
-        const backCam = cams.find(c => c.label.toLowerCase().includes('back') || c.label.toLowerCase().includes('environment'));
-        const camId = backCam ? backCam.id : cams[0].id;
-
-        await html5QrCode.start(
-          camId,
-          { fps: 12, qrbox: 250 },
-          onScanSuccess
-        );
-      } catch (err) {
-        alert('Camera error: ' + err.message);
-        console.error(err);
-      }
-    }
-    
-    window.addEventListener('load', startScanner);
-  </script>
+  <script src="index.js"></script>
 </body>
 </html>
