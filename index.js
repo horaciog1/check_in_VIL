@@ -28,13 +28,26 @@ function onScanSuccess(decodedText) {
     };
 
     fetch(ENDPOINT, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-    }).then(r => {
-    if (r.ok) flashBackground('#69f0ae');
-    else flashBackground('#ff5252');
-    }).catch(() => flashBackground('#ff5252'));
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    })
+    .then(async r => {
+    const result = await r.json().catch(() => ({}));
+    console.log("Response status:", r.status);
+    console.log("Response body:", result);
+
+        if (r.ok) {
+            flashBackground('#69f0ae');
+        } else {
+            flashBackground('#ff5252');
+        }
+    })
+    .catch(err => {
+        console.error("Fetch error:", err);
+        flashBackground('#ff5252');
+    });
+
 }
 
 async function startScanner() {
