@@ -53,8 +53,8 @@ function onScanSuccess(decodedText) {
 }
 
 async function startScanner() {
+  console.log("Initializing ZXing scanner...");
   const codeReader = new ZXing.BrowserQRCodeReader();
-  const videoElementId = 'reader';
   const videoInputDevices = await codeReader.getVideoInputDevices();
   
   if (!videoInputDevices.length) {
@@ -66,7 +66,7 @@ async function startScanner() {
 
   codeReader.decodeFromVideoDeviceContinuously(
     selectedDeviceId,
-    videoElementId,
+    'video',  // must match your <video id="video">
     (result, err) => {
       if (result) {
         const text = result.getText();
@@ -80,6 +80,7 @@ async function startScanner() {
     }
   );
 }
+
 
   
   /* ───────────────────────── user-gesture wiring ───────────────────────── */
