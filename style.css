@@ -1,13 +1,25 @@
 /* === Global reset & core layout === */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; }
+
 body {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     font-family: "Poppins", sans-serif;
     background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
     color: #333;
+    text-align: center;
+    padding: 1rem;
+}
+
+/* === Main vertical wrapper === */
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 /* === Glassmorphic card === */
@@ -22,6 +34,7 @@ body {
     padding: 2rem 1.5rem 2.5rem;
     box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
     text-align: center;
+    margin-bottom: 1rem;
 }
 
 h1 {
@@ -74,15 +87,19 @@ h1 {
 }
 
 /* === QR reader box === */
-/* --- mobile fix: ensure video renders & fills the box --- */
 #reader {
     width: 320px;
-    height: 320px;          /* keep or switch to aspect-ratio if you like */
-    margin: 1rem auto;      /* center under the card */
+    height: 320px;
+    margin: 1rem auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-  
+
 #reader video {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 1rem;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
 }

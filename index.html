@@ -21,23 +21,27 @@
 
 </head>
 <body>
-  <div class="card" id="uiCard">
-    <h1>Summer Camp Scanner</h1>
-    <div id="status">Tap <strong>Start</strong>, then choose a mode</div>
-    <button id="startBtn" class="btn primary">Start scanning</button>
+  <div class="main-container">
+    <div class="card" id="uiCard">
+      <h1>Summer Camp Scanner</h1>
+      <div id="status">Tap <strong>Start</strong>, then choose a mode</div>
+      <button id="startBtn" class="btn primary">Start scanning</button>
 
-    <div class="controls" style="display:none">
-      <button class="btn" data-mode="checkin">Check&nbsp;In</button>
-      <button class="btn" data-mode="checkout">Check&nbsp;Out</button>
-      <button class="btn" data-mode="points">+1&nbsp;Point</button>
+      <div class="controls" style="display:none">
+        <button class="btn" data-mode="checkin">Check&nbsp;In</button>
+        <button class="btn" data-mode="checkout">Check&nbsp;Out</button>
+        <button class="btn" data-mode="points">+1&nbsp;Point</button>
+      </div>
+    </div>
+
+    <!-- Scanner feed appears below the card -->
+    <div id="reader" style="display:none">
+      <video id="video" autoplay muted playsinline></video>
     </div>
   </div>
 
-  <div id="reader" style="display:none">
-    <video id="video" autoplay muted playsinline></video>
-  </div>  
-
   <script src="index.js" defer></script>
 </body>
+
 
 </html>
