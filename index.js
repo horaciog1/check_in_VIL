@@ -53,33 +53,34 @@ function onScanSuccess(decodedText) {
 }
 
 async function startScanner() {
-    try {
-      html5QrCode = new Html5Qrcode('reader');
-
-      const qrSide = Math.min(window.innerWidth, 300) * 0.7;
-
-      await html5QrCode.start(
-        { facingMode: { exact: "environment" } },
-        { fps: 12, qrbox: qrSide },
-        onScanSuccess
-      );
-    } catch (err) {
-      if (err.name === "OverconstrainedError") {
-        await html5QrCode.start(
-          { facingMode: "environment" },
-          { fps: 12, qrbox: qrSide },
-          onScanSuccess
-        );
-      } else if (err.name === "NotAllowedError") {
-        alert("Camera permission denied — enable it in browser settings.");
-      } else if (err.name === "NotFoundError") {
-        alert("No camera found on this device.");
-      } else {
-        alert("Camera error: " + err.message);
-      }
-      console.error(err);
-    }
+  const codeReader = new ZXing.BrowserQRCodeReader();
+  const videoElementId = 'reader';
+  const videoInputDevices = await codeReader.getVideoInputDevices();
+  
+  if (!videoInputDevices.length) {
+    alert("No camera found.");
+    return;
   }
+
+  const selectedDeviceId = videoInputDevices[0].deviceId;
+
+  codeReader.decodeFromVideoDeviceContinuously(
+    selectedDeviceId,
+    videoElementId,
+    (result, err) => {
+      if (result) {
+        const text = result.getText();
+        console.log("QR code detected:", text);
+        onScanSuccess(text);
+      }
+
+      if (err && !(err instanceof ZXing.NotFoundException)) {
+        console.warn("ZXing error:", err);
+      }
+    }
+  );
+}
+
   
   /* ───────────────────────── user-gesture wiring ───────────────────────── */
     document.addEventListener('DOMContentLoaded', () => {
