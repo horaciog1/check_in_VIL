@@ -74,13 +74,10 @@ async function startScanner() {
 
     console.log("Using camera:", selectedDeviceId);
 
-    console.log("Starting video decoding...");
-
     codeReader.decodeFromVideoDevice(
       selectedDeviceId,
       'video',
       (result, err) => {
-        console.log("decodeFromVideoDevice called");
         if (result) {
           const text = result.getText();
           console.log("QR code detected:", text);
