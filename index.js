@@ -80,6 +80,7 @@ async function startScanner() {
       selectedDeviceId,
       'video',
       (result, err) => {
+        console.log("decodeFromVideoDevice called");
         if (result) {
           const text = result.getText();
           console.log("QR code detected:", text);
@@ -92,7 +93,6 @@ async function startScanner() {
       }
     );
     
-    console.log("decodeFromVideoDevice called");
 
   } catch (error) {
     console.error("ZXing scanner error:", error);
