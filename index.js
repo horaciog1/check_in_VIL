@@ -55,17 +55,26 @@ function onScanSuccess(decodedText) {
 async function startScanner() {
   console.log("Initializing ZXing scanner...");
   const codeReader = new ZXing.BrowserQRCodeReader();
-  const videoInputDevices = await codeReader.getVideoInputDevices();
-
-  if (!videoInputDevices.length) {
-    alert("No camera found.");
-    return;
-  }
-
-  const selectedDeviceId = videoInputDevices[0].deviceId;
 
   try {
-    const result = await codeReader.decodeFromVideoDevice(
+    const devices = await codeReader.getVideoInputDevices();
+    if (!devices.length) {
+      alert("No camera found.");
+      return;
+    }
+
+    // Try to find the environment-facing (rear) camera
+    let selectedDeviceId = devices[0].deviceId; // fallback
+    for (const device of devices) {
+      if (device.label.toLowerCase().includes('back') || device.label.toLowerCase().includes('rear') || device.label.toLowerCase().includes('environment')) {
+        selectedDeviceId = device.deviceId;
+        break;
+      }
+    }
+
+    console.log("Using camera:", selectedDeviceId);
+
+    await codeReader.decodeFromVideoDevice(
       selectedDeviceId,
       'video',
       (result, err) => {
@@ -85,6 +94,7 @@ async function startScanner() {
     alert("Failed to start QR scanner: " + error.message);
   }
 }
+
   
   /* ───────────────────────── user-gesture wiring ───────────────────────── */
     document.addEventListener('DOMContentLoaded', () => {
