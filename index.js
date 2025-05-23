@@ -74,7 +74,9 @@ async function startScanner() {
 
     console.log("Using camera:", selectedDeviceId);
 
-    await codeReader.decodeFromVideoDevice(
+    console.log("Starting video decoding...");
+
+    codeReader.decodeFromVideoDevice(
       selectedDeviceId,
       'video',
       (result, err) => {
@@ -83,12 +85,15 @@ async function startScanner() {
           console.log("QR code detected:", text);
           onScanSuccess(text);
         }
-
+    
         if (err && !(err instanceof ZXing.NotFoundException)) {
           console.warn("ZXing error:", err);
         }
       }
     );
+    
+    console.log("decodeFromVideoDevice called");
+
   } catch (error) {
     console.error("ZXing scanner error:", error);
     alert("Failed to start QR scanner: " + error.message);
