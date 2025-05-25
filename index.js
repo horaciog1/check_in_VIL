@@ -135,13 +135,13 @@ document.addEventListener('DOMContentLoaded', () => {
     startBtn.addEventListener('click', async () => {
         startBtn.disabled = true;
 
-        /* 1️⃣ make the reader visible first — gives it real dimensions */
+        /* 1️ make the reader visible first — gives it real dimensions */
         readerBox.style.display = 'block';
 
-        /* 2️⃣ now start the scanner (it will find readerBox 320×320) */
+        /* 2️ now start the scanner (it will find readerBox 320×320) */
         await startScanner();
 
-        /* 3️⃣ reveal the mode buttons */
+        /* 3️ reveal the mode buttons */
         startBtn.style.display = 'none';
         controls.style.display = 'flex';
     });
