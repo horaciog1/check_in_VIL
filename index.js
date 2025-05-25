@@ -37,7 +37,10 @@ function flashBackground(color) {
  * @return {void} - This function does not return any value.
  */
 function onScanSuccess(decodedText) {
-    if (!mode) { flashBackground('#ff5252'); return; }
+    if (!mode) {
+        flashBackground('#ff5252');
+        return;
+    }
 
     // const payload = {
     // student_id: decodedText.trim(),
@@ -57,17 +60,17 @@ function onScanSuccess(decodedText) {
         timestamp: new Date().toISOString(),
         counsellor_id: 'unset'
     });
-      
+
     fetch(`${ENDPOINT}?${qs}`, {  // ENDPOINT can be the original …/exec
         mode: 'no-cors'             // <- bypass CORS check
     })
 
-    .then(() => flashBackground('#69f0ae')) // always green; you know it reached the server
-    
-    .catch(err => {
-        console.error(err);
-        flashBackground('#ff5252');           // network failure (rare)
-    });
+        .then(() => flashBackground('#69f0ae')) // always green; you know it reached the server
+
+        .catch(err => {
+            console.error(err);
+            flashBackground('#ff5252');           // network failure (rare)
+        });
 }
 
 /**
@@ -78,74 +81,74 @@ function onScanSuccess(decodedText) {
  * @return {Promise<void>} A promise that resolves when the scanner starts successfully, or logs an error if initialization fails.
  */
 async function startScanner() {
-  console.log("Initializing ZXing scanner...");
-  const codeReader = new ZXing.BrowserQRCodeReader();
+    console.log("Initializing ZXing scanner...");
+    const codeReader = new ZXing.BrowserQRCodeReader();
 
-  try {
-    const devices = await codeReader.getVideoInputDevices();
-    if (!devices.length) {
-      alert("No camera found.");
-      return;
-    }
-
-    // Try to find the environment-facing (rear) camera
-    let selectedDeviceId = devices[0].deviceId; // fallback
-    for (const device of devices) {
-      if (device.label.toLowerCase().includes('back') || device.label.toLowerCase().includes('rear') || device.label.toLowerCase().includes('environment')) {
-        selectedDeviceId = device.deviceId;
-        break;
-      }
-    }
-
-    console.log("Using camera:", selectedDeviceId);
-
-    codeReader.decodeFromVideoDevice(
-      selectedDeviceId,
-      'video',
-      (result, err) => {
-        if (result) {
-          const text = result.getText();
-          console.log("QR code detected:", text);
-          onScanSuccess(text);
+    try {
+        const devices = await codeReader.getVideoInputDevices();
+        if (!devices.length) {
+            alert("No camera found.");
+            return;
         }
-    
-        if (err && !(err instanceof ZXing.NotFoundException)) {
-          console.warn("ZXing error:", err);
-        }
-      }
-    );
-    
 
-  } catch (error) {
-    console.error("ZXing scanner error:", error);
-    alert("Failed to start QR scanner: " + error.message);
-  }
+        // Try to find the environment-facing (rear) camera
+        let selectedDeviceId = devices[0].deviceId; // fallback
+        for (const device of devices) {
+            if (device.label.toLowerCase().includes('back') || device.label.toLowerCase().includes('rear') || device.label.toLowerCase().includes('environment')) {
+                selectedDeviceId = device.deviceId;
+                break;
+            }
+        }
+
+        console.log("Using camera:", selectedDeviceId);
+
+        codeReader.decodeFromVideoDevice(
+            selectedDeviceId,
+            'video',
+            (result, err) => {
+                if (result) {
+                    const text = result.getText();
+                    console.log("QR code detected:", text);
+                    onScanSuccess(text);
+                }
+
+                if (err && !(err instanceof ZXing.NotFoundException)) {
+                    console.warn("ZXing error:", err);
+                }
+            }
+        );
+
+
+    } catch (error) {
+        console.error("ZXing scanner error:", error);
+        alert("Failed to start QR scanner: " + error.message);
+    }
 }
 
-  
-  /* ───────────────────────── user-gesture wiring ───────────────────────── */
-    document.addEventListener('DOMContentLoaded', () => {
-        const startBtn  = document.getElementById('startBtn');
-        const controls  = document.querySelector('.controls');
-        const readerBox = document.getElementById('reader');
-  
+
+/* ───────────────────────── user-gesture wiring ───────────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+    const startBtn = document.getElementById('startBtn');
+    const controls = document.querySelector('.controls');
+    const readerBox = document.getElementById('reader');
+
     startBtn.addEventListener('click', async () => {
         startBtn.disabled = true;
-      
+
         /* 1️⃣ make the reader visible first — gives it real dimensions */
         readerBox.style.display = 'block';
-      
+
         /* 2️⃣ now start the scanner (it will find readerBox 320×320) */
         await startScanner();
-      
+
         /* 3️⃣ reveal the mode buttons */
         startBtn.style.display = 'none';
         controls.style.display = 'flex';
     });
-      
+
     document.querySelectorAll('[data-mode]').forEach(b =>
-      b.addEventListener('click', () => setMode(b.dataset.mode))
+        b.addEventListener('click', () => setMode(b.dataset.mode))
     );
-  });  
+});
 
 window.setMode = setMode;
