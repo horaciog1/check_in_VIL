@@ -5,6 +5,12 @@ const ENDPOINT = "https://script.google.com/macros/s/AKfycby6jIMM08QyB2_MhUqxD1u
 let mode = null;
 let html5QrCode;
 
+/**
+ * Sets the operational mode and updates the status display accordingly.
+ *
+ * @param {string} m - The mode to set. Expected values are 'checkin', 'checkout', or other strings representing custom modes.
+ * @return {void} This method does not return a value.
+ */
 function setMode(m) {
     mode = m;
     const pretty = m === 'checkin' ? 'Check In' : m === 'checkout' ? 'Check Out' : '+1 Point';
@@ -12,12 +18,24 @@ function setMode(m) {
     flashBackground('#00e676');
 }
 
+/**
+ * Temporarily flashes the background of the document's body with the given color.
+ *
+ * @param {string} color - The color to flash the background with. It should be a valid CSS color value.
+ * @return {void} This function does not return a value.
+ */
 function flashBackground(color) {
     const original = document.body.style.background;
     document.body.style.background = color;
     setTimeout(() => (document.body.style.background = ''), 180);
 }
 
+/**
+ * Processes the scanned data and triggers appropriate actions based on the scanned result.
+ *
+ * @param {string} decodedText - The text decoded from the scanned input.
+ * @return {void} - This function does not return any value.
+ */
 function onScanSuccess(decodedText) {
     if (!mode) { flashBackground('#ff5252'); return; }
 
@@ -52,6 +70,13 @@ function onScanSuccess(decodedText) {
     });
 }
 
+/**
+ * Initializes a QR code scanner using the ZXing library and attempts to detect and decode QR codes from a video input device.
+ *
+ * The function tries to find and use the environment-facing (rear) camera to detect QR codes. If no compatible device is available, it alerts the user.
+ *
+ * @return {Promise<void>} A promise that resolves when the scanner starts successfully, or logs an error if initialization fails.
+ */
 async function startScanner() {
   console.log("Initializing ZXing scanner...");
   const codeReader = new ZXing.BrowserQRCodeReader();
