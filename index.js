@@ -4,6 +4,9 @@ const ENDPOINT = "https://script.google.com/macros/s/AKfycby6jIMM08QyB2_MhUqxD1u
 
 let mode = null;
 let html5QrCode;
+let lastScannedText = null;
+let lastScannedTime = 0;
+const scanSound = new Audio('check-in.wav');
 
 /**
  * Sets the operational mode and updates the status display accordingly.
@@ -41,6 +44,19 @@ function onScanSuccess(decodedText) {
         flashBackground('#ff5252');
         return;
     }
+
+
+    // ignore duplicates for 3s == 3000
+    const now = Date.now();
+    if (decodedText === lastScannedText && (now - lastScannedTime) < 3000) {
+      return;
+    }
+    lastScannedText = decodedText;
+    lastScannedTime = now;
+
+    // play the check-in sound
+    scanSound.currentTime = 0;
+    scanSound.play().catch(console.warn);
 
     // const payload = {
     // student_id: decodedText.trim(),
