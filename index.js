@@ -2,6 +2,21 @@
 const ENDPOINT = "https://script.google.com/macros/s/AKfycby6jIMM08QyB2_MhUqxD1uiD5IumluQOdR_m1tGRZZzlFuZ5bJooPLdPWajefYNav2o/exec";
 /* =============== */
 
+
+/**
+ * Return an ISO8601 timestamp in GMT-6 by subtracting 6h from UTC.
+ * e.g. "2025-05-28T14:36:09.397-06:00"
+ */
+function getGMT6Timestamp() {
+  // subtract 6 hours (6*60*60*1000 ms) from the UTC-based clock
+  const msOffset = 6 * 60 * 60 * 1000;
+  // Make a Date at UTC now minus 6h:
+  const gmt6 = new Date(Date.now() - msOffset);
+  // toISOString() gives "YYYY-MM-DDTHH:mm:ss.sssZ"
+  // swap the trailing "Z" for "-06:00"
+  return gmt6.toISOString().replace(/Z$/, "-06:00");
+}
+
 let mode = null;
 let html5QrCode;
 let lastScannedText = null;
@@ -65,8 +80,9 @@ function onScanSuccess(decodedText) {
     const qs = new URLSearchParams({
         student_id: decodedText.trim(),
         type: mode,
-        timestamp: new Date().toISOString(),
-        counsellor_id: 'unset'                  // replace with auth email later
+        // use GMT-6 timestamp instead of UTC
+        timestamp: getGMT6Timestamp(),
+        counsellor_id: 'unset'
     });
 
     fetch(`${ENDPOINT}?${qs}`, {  // ENDPOINT is the …/exec
