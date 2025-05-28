@@ -18,7 +18,7 @@ function setMode(m) {
     mode = m;
     const pretty = m === 'checkin' ? 'Check In' : m === 'checkout' ? 'Check Out' : '+1 Point';
     document.getElementById('status').innerText = `Mode: ${pretty}`;
-    flashBackground('#00e676');
+    flashBackground('#ecb3cb');
 }
 
 /**
@@ -30,7 +30,7 @@ function setMode(m) {
 function flashBackground(color) {
     const original = document.body.style.background;
     document.body.style.background = color;
-    setTimeout(() => (document.body.style.background = ''), 180);
+    setTimeout(() => (document.body.style.background = ''), 600);
 }
 
 /**
@@ -58,34 +58,29 @@ function onScanSuccess(decodedText) {
     scanSound.currentTime = 0;
     scanSound.play().catch(console.warn);
 
-    // const payload = {
-    // student_id: decodedText.trim(),
-    // type: mode,
-    // timestamp: new Date().toISOString(),
-    // counsellor_id: 'unset' // replace with auth email later
-    // };
+    // show persistent "processing..." red
+    document.body.style.background = '#ff3a3a';
 
-    // fetch(ENDPOINT, {
-    //     method: 'POST',
-    //     body: JSON.stringify(payload)
-    // })
-    // --- build query string for a GET ---
+    //  build query string for a GET 
     const qs = new URLSearchParams({
         student_id: decodedText.trim(),
         type: mode,
         timestamp: new Date().toISOString(),
-        counsellor_id: 'unset'
+        counsellor_id: 'unset'                  // replace with auth email later
     });
 
-    fetch(`${ENDPOINT}?${qs}`, {  // ENDPOINT can be the original …/exec
+    fetch(`${ENDPOINT}?${qs}`, {  // ENDPOINT is the …/exec
         mode: 'no-cors'             // <- bypass CORS check
     })
 
-        .then(() => flashBackground('#69f0ae')) // always green; you know it reached the server
+        .then(() => {
+            // done processing -> flash green then revert
+            flashBackground('#86f265');
+        })
 
         .catch(err => {
             console.error(err);
-            flashBackground('#ff5252');           // network failure (rare)
+            flashBackground('#ff5252');           // network failure 
         });
 }
 
