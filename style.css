@@ -9,6 +9,16 @@ html, body {
     height: 100%;
 }
 
+/* Wrap both rows in a column flex so they stay stacked neatly */
+.controls-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;              /* fill the card’s width */
+}
+
+
 body {
     display: flex;
     flex-direction: column;
@@ -52,13 +62,21 @@ h1 {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* === Button styling === */
+/* 2) Each .controls row is a single flex line of exactly two buttons */
 .controls {
-    display: flex;
-    justify-content: center;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-    margin-bottom: 1.25rem;
+  display: flex;
+  justify-content: space-between;  /* push buttons to the edges */
+  width: 100%;
+  max-width: 300px;                /* or whatever fits in your 400px-wide card */
+  margin-bottom: 1rem;
+  /* remove flex-wrap so they never wrap */
+}
+
+/* 3) Make each button share that space equally */
+.controls .btn {
+  flex: 1;                 /* each takes 50% of the row */
+  margin: 0 0.5rem;        /* small gutter between them */
+  min-width: 0;            /* allow them to shrink if needed */
 }
 
 .btn {

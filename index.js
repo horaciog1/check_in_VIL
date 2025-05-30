@@ -31,7 +31,12 @@ const scanSound = new Audio('check-in.wav');
  */
 function setMode(m) {
     mode = m;
-    const pretty = m === 'checkin' ? 'Check In' : m === 'checkout' ? 'Check Out' : '+1 Point';
+    let pretty;
+    if      (m === 'checkin')  pretty = 'Check In';
+    else if (m === 'checkout') pretty = 'Check Out';
+    else if (m === 'points')   pretty = '+1 Point';
+    else if (m === 'nopoints') pretty = 'No Points';
+    else                        pretty = m;
     document.getElementById('status').innerText = `Mode: ${pretty}`;
     flashBackground('#ecb3cb');
 }
@@ -155,27 +160,20 @@ async function startScanner() {
 
 /* ───────────────────────── user-gesture wiring ───────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
-    const startBtn = document.getElementById('startBtn');
-    const controls = document.querySelector('.controls');
-    const readerBox = document.getElementById('reader');
+    const startBtn        = document.getElementById('startBtn');
+    const controlsSection = document.querySelector('.controls-section');
+    const readerBox       = document.getElementById('reader');
 
     startBtn.addEventListener('click', async () => {
         startBtn.disabled = true;
-
-        /* 1️ make the reader visible first — gives it real dimensions */
-        readerBox.style.display = 'block';
-
-        /* 2️ now start the scanner (it will find readerBox 320×320) */
+        readerBox.style.display       = 'block'; 
         await startScanner();
-
-        /* 3️ reveal the mode buttons */
-        startBtn.style.display = 'none';
-        controls.style.display = 'flex';
+        startBtn.style.display        = 'none';
+        controlsSection.style.display = 'flex';
     });
 
-    document.querySelectorAll('[data-mode]').forEach(b =>
-        b.addEventListener('click', () => setMode(b.dataset.mode))
-    );
+    document.querySelectorAll('[data-mode]')
+      .forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
 });
 
 window.setMode = setMode;
