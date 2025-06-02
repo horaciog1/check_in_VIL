@@ -22,6 +22,9 @@ let html5QrCode;
 let lastScannedText = null;
 let lastScannedTime = 0;
 const scanSound = new Audio('check-in.wav');
+const pointsSound = new Audio('points.wav');
+scanSound.preload   = 'auto';
+pointsSound.preload = 'auto';
 
 /**
  * Sets the operational mode and updates the status display accordingly.
@@ -39,6 +42,16 @@ function setMode(m) {
     else                        pretty = m;
     document.getElementById('status').innerText = `Mode: ${pretty}`;
     flashBackground('#ecb3cb');
+}
+
+function playModeSound() {
+  if (mode === 'checkin' || mode === 'checkout') {
+    scanSound.currentTime = 0;
+    scanSound.play().catch(console.warn);
+  } else if (mode === 'points' || mode === 'nopoints') {
+    pointsSound.currentTime = 0;
+    pointsSound.play().catch(console.warn);
+  }
 }
 
 /**
@@ -75,8 +88,11 @@ function onScanSuccess(decodedText) {
     lastScannedTime = now;
 
     // play the check-in sound
-    scanSound.currentTime = 0;
-    scanSound.play().catch(console.warn);
+    // scanSound.currentTime = 0;
+    // scanSound.play().catch(console.warn);
+
+    // Play corresponding sound
+    playModeSound();
 
     // show persistent "processing..." red
     document.body.style.background = '#ff3a3a';
