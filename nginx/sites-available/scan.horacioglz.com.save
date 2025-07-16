@@ -1,0 +1,23 @@
+server {
+    listen 80;
+    server_name scan.horacioglz.com;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name scan.horacioglz.com;
+
+    ssl_certificate /etc/ssl/horacioglz/chain.crt;
+    ssl_certificate_key /etc/ssl/horacioglz/_.horacioglz.com_private_key.key;
+    ssl_trusted_certificate /etc/ssl/horacioglz/chain.crt;
+
+    root /var/www/scan.horacioglz.com;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ =404;
+	 
+   }
+
+}
