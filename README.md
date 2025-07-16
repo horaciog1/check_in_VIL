@@ -1,3 +1,5 @@
+<div align="center">
+
 # CHECK_IN_VIL
 
 _Transforming Attendance with Seamless, Real-Time Innovation_
@@ -6,9 +8,12 @@ _Transforming Attendance with Seamless, Real-Time Innovation_
 [![JavaScript](https://img.shields.io/badge/javascript-35.0%25-blue)]()
 [![Languages](https://img.shields.io/badge/languages-6-blue)]()
 
-Built with the tools and technologies:
-![JavaScript](https://img.shields.io/badge/-JavaScript-yellow?logo=javascript)
-![Bash](https://img.shields.io/badge/-GNU%20Bash-brightgreen?logo=gnu-bash)
+_Built with the tools and technologies:_
+
+<img src="https://img.shields.io/badge/-JavaScript-yellow?logo=javascript" alt="JavaScript">
+<img src="https://img.shields.io/badge/-GNU%20Bash-brightgreen?logo=gnu-bash" alt="Bash">
+
+</div>
 
 ---
 
@@ -18,8 +23,6 @@ Built with the tools and technologies:
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
-  - [Usage](#usage)
-  - [Testing](#testing)
 
 ---
 
@@ -52,8 +55,8 @@ The project aims to simplify attendance and engagement management through real-t
 Make sure you have the following installed:
 
 - HTML/CSS/JS knowledge
+- Nginx
 - Modern web browser
-- Node.js (if running locally)
 - Access to a Google account for Google Sheets API
 
 ### Installation
@@ -67,18 +70,3 @@ Make sure you have the following installed:
     ```bash
     cd check_in_VIL
     ```
-
-3. **Install the dependencies**:
-    *(Edit this section with the actual command if you use `npm`, `yarn`, etc.)*
-    ```bash
-    npm install
-    ```
-
----
-
-## Usage
-
-To start the app in development mode:
-
-```bash
-npm start
