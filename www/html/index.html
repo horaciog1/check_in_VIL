@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Horacio Gonzalez</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans leading-relaxed tracking-normal">
+
+  <!-- Header -->
+  <header class="bg-white shadow-md py-6">
+    <div class="max-w-6xl mx-auto px-4 flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-indigo-600">Horacio Gonzalez</h1>
+      <nav class="space-x-4">
+        <a href="#about" class="hover:text-indigo-600">About</a>
+        <a href="#projects" class="hover:text-indigo-600">Projects</a>
+        <a href="#resume" class="hover:text-indigo-600">Resume</a>
+        <a href="#contact" class="hover:text-indigo-600">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Intro -->
+  <main class="mt-16 px-6 text-center">
+    <section class="max-w-3xl mx-auto">
+      <h2 class="text-4xl font-extrabold mb-4">👋 Hi, I'm Horacio</h2>
+      <p class="text-lg text-gray-700 mb-6">
+        I’m a cybersecurity student who just graduated from NMSU (Spring 2025). I build intrusion detection systems, hack tools, and secure software. I love hands-on problem solving, embedded systems, and ethical hacking.
+      </p>
+      <a href="#projects" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-full transition">
+        Explore My Work
+      </a>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="mt-24 max-w-4xl mx-auto text-left">
+      <h3 class="text-2xl font-semibold text-indigo-600 mb-4">About Me</h3>
+      <p class="mb-4 text-gray-700">
+        I recently earned my B.S. in Cybersecurity from New Mexico State University, GPA 3.96, Honors, and Latinx Recognition Honoree. I’ve led STEM outreach for youth, built AI-powered IDS tools, and contributed to reverse engineering and embedded communications projects.
+      </p>
+      <p class="text-gray-700">
+        I’m passionate about Linux, penetration testing, low-level programming, and secure system design. I’ve also trained with the Spanish National Police (C1b3rwall Academy) in cybercrime response.
+      </p>
+    </section>
+
+    <!-- Projects -->
+    <section id="projects" class="mt-24 max-w-4xl mx-auto text-left">
+      <h3 class="text-2xl font-semibold text-indigo-600 mb-6">Highlighted Projects</h3>
+      <div class="space-y-6">
+        <div class="bg-white shadow rounded-lg p-6">
+          <h4 class="text-xl font-bold">🛡 NeuralNIDS</h4>
+          <p class="text-gray-700">An AI-driven Network Intrusion Detection System with real-time dashboard, alerting, and ML-based anomaly detection using Suricata logs and XGBoost.</p>
+        </div>
+        <div class="bg-white shadow rounded-lg p-6">
+          <h4 class="text-xl font-bold">📡 LoRa Encrypted Mesh Chat</h4>
+          <p class="text-gray-700">A secure LoRa-based chat system using AES encryption, message relaying, CTS/RTS reliability, and a Flask-based UI. Built for mobile computing course.</p>
+        </div>
+        <div class="bg-white shadow rounded-lg p-6">
+          <h4 class="text-xl font-bold">🔐 Crypto Mode Benchmark</h4>
+          <p class="text-gray-700">Benchmarked DES, 3DES, AES, and Blowfish across CBC, OFB, and CTR modes using Python and PyCryptodome with parallelized encryption and decryption analysis.</p>
+        </div>
+        <div class="bg-white shadow rounded-lg p-6">
+          <h4 class="text-xl font-bold">🧬 Malware RE Lab</h4>
+          <p class="text-gray-700">Reverse engineered malware samples using IDA Pro, Ghidra, and Flare VM on isolated Windows 11 virtual environments. Focused on API tracing and dynamic analysis.</p>
+        </div>
+        <div class="bg-white shadow rounded-lg p-6">
+          <h4 class="text-xl font-bold">🎮 Juan Wick: Pixel Vengeance</h4>
+          <p class="text-gray-700">2D shooter inspired by John Wick, written in Java (9,000+ LOC), with modular architecture, skin system, and future multiplayer support. Built in CS371 game dev class.</p>
+        </div>
+        <div class="bg-white shadow rounded-lg p-6">
+          <h4 class="text-xl font-bold">🗃 Database Manager GUI</h4>
+          <p class="text-gray-700">Python GUI app with Tkinter to manage MySQL tables: insert, retrieve, and compute aggregates. Great for learning GUI design and DB interaction via Python.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Resume Highlights -->
+    <section id="resume" class="mt-24 max-w-4xl mx-auto text-left">
+      <h3 class="text-2xl font-semibold text-indigo-600 mb-4">Resume Highlights</h3>
+
+      <h4 class="text-lg font-bold mt-6 text-gray-800">Education</h4>
+      <ul class="list-disc list-inside text-gray-700">
+        <li>B.S. in Cybersecurity, NMSU — GPA: 3.96, Spring 2025</li>
+        <li>C1b3rwall Academy (Spain) — Cybercrime course certificate, 2020</li>
+      </ul>
+
+      <h4 class="text-lg font-bold mt-6 text-gray-800">Work Experience</h4>
+      <ul class="list-disc list-inside text-gray-700">
+        <li>Student Assistant – Verizon STEM Achievers: Led 150 students in AI, robotics, 3D printing, and drones</li>
+        <li>Student Assistant – DEPICT: Taught high schoolers cryptography and computational thinking</li>
+      </ul>
+
+      <h4 class="text-lg font-bold mt-6 text-gray-800">Skills</h4>
+      <div class="grid grid-cols-2 gap-4 text-gray-700">
+        <ul class="list-disc list-inside">
+          <li>Python, Java, C/C++, Assembly, Bash</li>
+          <li>Linux (Kali, Alma, Debian), macOS, Windows</li>
+          <li>Wireshark, Metasploit, Nmap, Suricata</li>
+          <li>Docker, Proxmox, AWS</li>
+        </ul>
+        <ul class="list-disc list-inside">
+          <li>Ghidra, IDA Pro, Flare VM, x64dbg</li>
+          <li>Digital Forensics, OSINT, RE, Pentesting</li>
+          <li>Bilingual: Fluent in Spanish</li>
+          <li>Drone building and piloting</li>
+        </ul>
+      </div>
+
+      <h4 class="text-lg font-bold mt-6 text-gray-800">Awards & Competitions</h4>
+      <ul class="list-disc list-inside text-gray-700">
+        <li>1st place GMiS Hackathon, 2023</li>
+        <li>SWCCDC Security Analyst – IR & Forensics (2025)</li>
+        <li>NCL top 200 nationwide (Spring 2024 & Fall 2024)</li>
+        <li>Crimson Scholar, Dean’s List, S-STEM Scholar</li>
+      </ul>
+
+      <h4 class="text-lg font-bold mt-6 text-gray-800">Relevant Coursework</h4>
+      <p class="text-gray-700">
+        Ethical Hacking, Digital Forensics, Cryptography, Reverse Engineering, Cloud & Edge Computing, OS, Malware Analysis, Linux Admin, Mobile Networks, DBMS.
+      </p>
+
+      <a href="/Horacio-Gonzalez-Resume.pdf" download class="inline-block mt-6 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
+        📄 Download Full Resume (PDF)
+      </a>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="mt-24 max-w-4xl mx-auto text-left mb-32">
+      <h3 class="text-2xl font-semibold text-indigo-600 mb-4">Contact</h3>
+      <p class="text-gray-700 mb-2">Email: <a href="mailto:horacioglz73@gmail.com" class="text-indigo-600 hover:underline">horacioglz73@gmail.com</a></p>
+      <p class="text-gray-700 mb-2">GitHub: <a href="https://github.com/horaciog1" class="text-indigo-600 hover:underline" target="_blank">github.com/horaciog1</a></p>
+      <p class="text-gray-700">LinkedIn: <a href="https://linkedin.com/in/horacio-gonzalez" class="text-indigo-600 hover:underline" target="_blank">linkedin.com/in/horacio-gonzalez</a></p>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white shadow-inner py-4 text-center text-gray-500">
+    &copy; 2025 Horacio Gonzalez. All rights reserved.
+  </footer>
+</body>
+</html>
