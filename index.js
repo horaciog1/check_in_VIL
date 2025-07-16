@@ -1,5 +1,8 @@
 /* === CONFIG === */
-const ENDPOINT = "https://script.google.com/macros/s/AKfycby6jIMM08QyB2_MhUqxD1uiD5IumluQOdR_m1tGRZZzlFuZ5bJooPLdPWajefYNav2o/exec";
+
+// Here goes the URL/endpoint for the google spreadsheet https://script.google.com/macros/...../exec
+const ENDPOINT = "";
+
 /* =============== */
 
 
