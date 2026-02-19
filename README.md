@@ -1,6 +1,6 @@
 <div align="center">
 
-# Summer Camp Attendance Scanner
+# 🏕️ Summer Camp Attendance Scanner
 
 _A lightweight, web-based QR code scanner designed to track attendance (check-in/check-out) and manage engagement points for summer camps. This application uses a mobile-friendly interface to scan QR codes and sends the data in real-time to a Google Sheet via Google Apps Script._
 
@@ -17,39 +17,40 @@ _Built with the tools and technologies:_
 
 ---
 
-## Table of Contents
+## 📚 Table of Contents
 
-- [Features](#features)
-- [Prerequisites](#prerequisites)
-- [Installation & Setup](#installation--setup)
+- [✨ Features](#features)
+- [⚙️ Prerequisites](#prerequisites)
+- [🛠 Installation & Setup](#installation--setup)
   - [1. Clone the Repository](#1-clone-the-repository)
   - [2. Frontend Configuration](#2-frontend-configuration)
   - [3. Backend (Google Apps Script)](#3-backend-google-apps-script)
   - [4. Generating QR Codes](#4-generating-qr-codes)
-- [Deployment](#deployment)
-  - [Nginx](#nginx)
-- [Usage](#usage)
-  
+- [🚀 Deployment](#deployment)
+  - [🌐 Nginx](#nginx)
+- [📱 Usage](#usage)
+- [🔐 Security Notes](#security-notes)
+
 ---
 
 
-## Features
+## ✨ Features
 
-- **Multi-Mode Scanning**: Easily switch between modes:
-  - **Check In / Check Out**: Track arrival and departure times.
-  - **+1 Point / No Points**: Log participation or engagement points.
-- **Real-Time Sync**: Instant data logging to Google Sheets.
-- **Audio Feedback**: Distinct sounds for successful scans and point logging.
-- **Mobile Optimized**: Designed for use on mobile devices with rear-facing cameras.
-- **QR Code Generator**: Includes a Python script to batch generate labeled QR codes from an Excel list.
+- 🔄 **Multi-Mode Scanning**:
+  - 🟢 **Check In / Check Out**: Track arrival and departure times.
+  - ⭐ **+1 Point / No Points**: Log participation or engagement points.
+- 📡 **Real-Time Sync**: Instant data logging to Google Sheets.
+- 🔊 **Audio Feedback**: Distinct sounds for successful scans and point logging.
+- 📲 **Mobile Optimized**: Designed for use on mobile devices with rear-facing cameras.
+- 🧾 **QR Code Generator**: Includes a Python script to batch generate labeled QR codes from an Excel list.
 
-## Prerequisites
+## ⚙️ Prerequisites
 
-- **Web Server**: Nginx (recommended) or any static file server.
-- **Google Account**: To host the Google Sheet and deploy the Apps Script.
-- **Python 3.x**: Required for generating QR codes (optional but recommended).
+- 🌐 **Web Server**: Nginx (recommended) or any static file server.
+- 🔐 **Google Account**: To host the Google Sheet and deploy the Apps Script.
+- 🐍 **Python 3.x**: Required for generating QR codes (optional but recommended).
 
-## Installation & Setup
+## 🛠 Installation & Setup
 
 ### 1. Clone the Repository
 
@@ -118,9 +119,9 @@ python qr.py students.xlsx --id-col student_id --name-col fullName --out-dir qr_
 
 *Run `python qr.py --help` for more options.*
 
-## Deployment
+## 🚀 Deployment
 
-### Nginx
+### 🌐 Nginx
 
 A sample deployment script `update.sh` is provided. It pulls the latest changes and copies files to a web server directory.
 
@@ -131,17 +132,26 @@ A sample deployment script `update.sh` is provided. It pulls the latest changes 
 
 Ensure your Nginx configuration points to the directory where the files are copied (e.g., `/var/www/scan.horacioglz.com/`).
 
-## Usage
+## 📱 Usage
 
 1.  Open the hosted `index.html` in a web browser (Chrome or Safari on mobile recommended).
 2.  Grant camera permissions when prompted.
 3.  Tap **Start scanning** to activate the camera.
 4.  Select a mode from the buttons below the scanner view:
-    - **Check In** / **Check Out**
-    - **+1 Point** / **No Points**
+    - 🟢 **Check In** / **Check Out**
+    - ⭐ **+1 Point** / **No Points**
 5.  Point the camera at a student's QR code.
 6.  Listen for the confirmation sound and watch for the green screen flash indicating a successful log.
 
-## License
+## 🔐 Security Notes
+
+This project uses a public Apps Script Web App endpoint by default. Anyone with the URL can send requests.
+
+Recommended:
+- 🔑 Require an API key (shared secret) and verify it in Apps Script
+- 📊 Restrict the Sheet access and monitor logs
+- 📮 Consider POST + JSON, not GET query params
+
+## 📄 License
 
 This project is open-source. Feel free to modify and adapt it for your needs.
