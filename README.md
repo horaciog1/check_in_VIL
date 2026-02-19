@@ -21,8 +21,15 @@ _Built with the tools and technologies:_
 
 - [Features](#features)
 - [Prerequisites](#prerequisites)
-- [Installation & Setup](#installation-&-Setup)
-
+- [Installation & Setup](#installation--setup)
+  - [1. Clone the Repository](#1-clone-the-repository)
+  - [2. Frontend Configuration](#2-frontend-configuration)
+  - [3. Backend (Google Apps Script)](#3-backend-google-apps-script)
+  - [4. Generating QR Codes](#4-generating-qr-codes)
+- [Deployment](#deployment)
+  - [Nginx](#nginx)
+- [Usage](#usage)
+  
 ---
 
 
