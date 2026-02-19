@@ -1,72 +1,116 @@
-<div align="center">
+# Summer Camp Attendance Scanner
 
-# CHECK_IN_VIL
+A lightweight, web-based QR code scanner designed to track attendance (check-in/check-out) and manage engagement points for summer camps. This application uses a mobile-friendly interface to scan QR codes and sends the data in real-time to a Google Sheet via Google Apps Script.
 
-_Transforming Attendance with Seamless, Real-Time Innovation_
+## Features
 
-[![Last Commit](https://img.shields.io/badge/last%20commit-today-brightgreen)](https://github.com/horaciog1/check_in_VIL)
-[![JavaScript](https://img.shields.io/badge/javascript-35.0%25-blue)]()
-[![Languages](https://img.shields.io/badge/languages-6-blue)]()
+- **Multi-Mode Scanning**: Easily switch between modes:
+  - **Check In / Check Out**: Track arrival and departure times.
+  - **+1 Point / No Points**: Log participation or engagement points.
+- **Real-Time Sync**: Instant data logging to Google Sheets.
+- **Audio Feedback**: Distinct sounds for successful scans and point logging.
+- **Mobile Optimized**: Designed for use on mobile devices with rear-facing cameras.
+- **QR Code Generator**: Includes a Python script to batch generate labeled QR codes from an Excel list.
 
-_Built with the tools and technologies:_
+## Prerequisites
 
-<img src="https://img.shields.io/badge/-JavaScript-yellow?logo=javascript" alt="JavaScript">
-<img src="https://img.shields.io/badge/-GNU%20Bash-brightgreen?logo=gnu-bash" alt="Bash">
+- **Web Server**: Nginx (recommended) or any static file server.
+- **Google Account**: To host the Google Sheet and deploy the Apps Script.
+- **Python 3.x**: Required for generating QR codes (optional but recommended).
 
-</div>
+## Installation & Setup
 
----
+### 1. Clone the Repository
 
-## Table of Contents
+```bash
+git clone https://github.com/horaciog1/check_in_VIL.git
+cd check_in_VIL
+```
 
-- [Overview](#overview)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
+### 2. Frontend Configuration
 
----
+The scanner needs to know where to send the data. You must configure the Google Apps Script endpoint.
 
-## Overview
+1.  Open `index.js` in a text editor.
+2.  Locate the `ENDPOINT` constant at the top of the file.
+3.  Replace the empty string with your deployed Google Apps Script Web App URL.
 
-**check_in_VIL** is a powerful developer tool that facilitates real-time QR code scanning for:
+```javascript
+// index.js
+const ENDPOINT = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
+```
 
-- Attendance
-- Check-in and check-out tracking
-- Engagement point tracking
+### 3. Backend (Google Apps Script)
 
-It integrates seamlessly with **Google Sheets** for data management. The system combines user-friendly interfaces with robust backend automation to streamline participation and engagement monitoring.
+You need a Google Apps Script deployed as a Web App to receive the data. The script should handle `GET` requests with the following parameters:
 
-### Why check_in_VIL?
+- `student_id`: The ID scanned from the QR code.
+- `type`: The mode of the scan (`checkin`, `checkout`, `points`, `nopoints`).
+- `timestamp`: ISO8601 timestamp (automatically adjusted to GMT-6 by the frontend).
+- `counsellor_id`: Currently defaults to `'unset'`, but can be modified in `index.js`.
 
-The project aims to simplify attendance and engagement management through real-time video scanning and automated deployment. The core features include:
+**Example `Code.gs` snippet:**
 
-- 🔍 **Scan & Track**: Real-time QR code scanning for quick check-in/out and point allocation.
-- 🧠 **Data Integration**: Direct logging to Google Spreadsheet endpoints for easy data access.
-- 🚀 **Automated Deployment**: Scripts to update repositories, copy files, and reload servers effortlessly.
-- 🔒 **Secure Hosting**: Configured SSL, HTTPS redirection, and security headers for reliable web access.
-- 🧩 **Multi-library Support**: Flexible scanning libraries for compatibility across devices.
+```javascript
+function doGet(e) {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Logs");
+  const params = e.parameter;
 
----
+  sheet.appendRow([
+    params.timestamp,
+    params.student_id,
+    params.type,
+    params.counsellor_id
+  ]);
 
-## Getting Started
+  return ContentService.createTextOutput("Success");
+}
+```
 
-### Prerequisites
+### 4. Generating QR Codes
 
-Make sure you have the following installed:
+A Python script `qr.py` is included to generate QR codes labeled with names and IDs from an Excel file.
 
-- HTML/CSS/JS knowledge
-- Nginx
-- Modern web browser
-- Access to a Google account for Google Sheets API
+**Install Dependencies:**
 
-### Installation
+```bash
+pip install pandas pillow qrcode openpyxl
+```
 
-1. **Clone the repository**:
-    ```bash
-    git clone https://github.com/horaciog1/check_in_VIL
-    ```
+**Usage:**
 
-2. **Navigate into the project directory**:
-    ```bash
-    cd check_in_VIL
-    ```
+Prepare an Excel file (e.g., `students.xlsx`) with columns for student IDs and names.
+
+```bash
+python qr.py students.xlsx --id-col student_id --name-col fullName --out-dir qr_codes
+```
+
+*Run `python qr.py --help` for more options.*
+
+## Deployment
+
+### Nginx
+
+A sample deployment script `update.sh` is provided. It pulls the latest changes and copies files to a web server directory.
+
+```bash
+# Example usage (adjust paths as needed)
+./update.sh
+```
+
+Ensure your Nginx configuration points to the directory where the files are copied (e.g., `/var/www/scan.horacioglz.com/`).
+
+## Usage
+
+1.  Open the hosted `index.html` in a web browser (Chrome or Safari on mobile recommended).
+2.  Grant camera permissions when prompted.
+3.  Tap **Start scanning** to activate the camera.
+4.  Select a mode from the buttons below the scanner view:
+    - **Check In** / **Check Out**
+    - **+1 Point** / **No Points**
+5.  Point the camera at a student's QR code.
+6.  Listen for the confirmation sound and watch for the green screen flash indicating a successful log.
+
+## License
+
+This project is open-source. Feel free to modify and adapt it for your needs.
