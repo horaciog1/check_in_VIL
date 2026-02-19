@@ -21,19 +21,19 @@ _Built with the tools and technologies:_
 
 - [✨ Features](#features)
 - [⚙️ Prerequisites](#prerequisites)
-- [🛠 Installation & Setup](#installation--setup)
-  - [1. Clone the Repository](#1-clone-the-repository)
-  - [2. Frontend Configuration](#2-frontend-configuration)
-  - [3. Backend (Google Apps Script)](#3-backend-google-apps-script)
-  - [4. Generating QR Codes](#4-generating-qr-codes)
+- [🛠 Installation & Setup](#installation-setup)
+  - [1. Clone the Repository](#clone)
+  - [2. Frontend Configuration](#frontend-config)
+  - [3. Backend (Google Apps Script)](#apps-script)
+  - [4. Generating QR Codes](#qr-codes)
 - [🚀 Deployment](#deployment)
   - [🌐 Nginx](#nginx)
 - [📱 Usage](#usage)
 - [🔐 Security Notes](#security-notes)
-
 ---
 
 
+<a id="features"></a>
 ## ✨ Features
 
 - 🔄 **Multi-Mode Scanning**:
@@ -44,14 +44,17 @@ _Built with the tools and technologies:_
 - 📲 **Mobile Optimized**: Designed for use on mobile devices with rear-facing cameras.
 - 🧾 **QR Code Generator**: Includes a Python script to batch generate labeled QR codes from an Excel list.
 
+<a id="prerequisites"></a>
 ## ⚙️ Prerequisites
 
 - 🌐 **Web Server**: Nginx (recommended) or any static file server.
 - 🔐 **Google Account**: To host the Google Sheet and deploy the Apps Script.
 - 🐍 **Python 3.x**: Required for generating QR codes (optional but recommended).
 
+<a id="installation-setup"></a>
 ## 🛠 Installation & Setup
 
+<a id="clone"></a>
 ### 1. Clone the Repository
 
 ```bash
@@ -59,6 +62,8 @@ git clone https://github.com/horaciog1/check_in_VIL.git
 cd check_in_VIL
 ```
 
+
+<a id="frontend-config"></a>
 ### 2. Frontend Configuration
 
 The scanner needs to know where to send the data. You must configure the Google Apps Script endpoint.
@@ -72,6 +77,7 @@ The scanner needs to know where to send the data. You must configure the Google 
 const ENDPOINT = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
 ```
 
+<a id="apps-script"></a>
 ### 3. Backend (Google Apps Script)
 
 You need a Google Apps Script deployed as a Web App to receive the data. The script should handle `GET` requests with the following parameters:
@@ -99,6 +105,7 @@ function doGet(e) {
 }
 ```
 
+<a id="qr-codes"></a>
 ### 4. Generating QR Codes
 
 A Python script `qr.py` is included to generate QR codes labeled with names and IDs from an Excel file.
@@ -119,8 +126,10 @@ python qr.py students.xlsx --id-col student_id --name-col fullName --out-dir qr_
 
 *Run `python qr.py --help` for more options.*
 
+<a id="deployment"></a>
 ## 🚀 Deployment
 
+<a id="nginx"></a>
 ### 🌐 Nginx
 
 A sample deployment script `update.sh` is provided. It pulls the latest changes and copies files to a web server directory.
@@ -132,6 +141,7 @@ A sample deployment script `update.sh` is provided. It pulls the latest changes 
 
 Ensure your Nginx configuration points to the directory where the files are copied (e.g., `/var/www/scan.horacioglz.com/`).
 
+<a id="usage"></a>
 ## 📱 Usage
 
 1.  Open the hosted `index.html` in a web browser (Chrome or Safari on mobile recommended).
@@ -143,6 +153,7 @@ Ensure your Nginx configuration points to the directory where the files are copi
 5.  Point the camera at a student's QR code.
 6.  Listen for the confirmation sound and watch for the green screen flash indicating a successful log.
 
+<a id="security-notes"></a>
 ## 🔐 Security Notes
 
 This project uses a public Apps Script Web App endpoint by default. Anyone with the URL can send requests.
