@@ -1,6 +1,30 @@
+<div align="center">
+
 # Summer Camp Attendance Scanner
 
-A lightweight, web-based QR code scanner designed to track attendance (check-in/check-out) and manage engagement points for summer camps. This application uses a mobile-friendly interface to scan QR codes and sends the data in real-time to a Google Sheet via Google Apps Script.
+_A lightweight, web-based QR code scanner designed to track attendance (check-in/check-out) and manage engagement points for summer camps. This application uses a mobile-friendly interface to scan QR codes and sends the data in real-time to a Google Sheet via Google Apps Script._
+
+[![Last Commit](https://img.shields.io/badge/last%20commit-today-brightgreen)](https://github.com/horaciog1/check_in_VIL)
+[![JavaScript](https://img.shields.io/badge/javascript-35.0%25-blue)]()
+[![Languages](https://img.shields.io/badge/languages-6-blue)]()
+
+_Built with the tools and technologies:_
+
+<img src="https://img.shields.io/badge/-JavaScript-yellow?logo=javascript" alt="JavaScript">
+<img src="https://img.shields.io/badge/-GNU%20Bash-brightgreen?logo=gnu-bash" alt="Bash">
+
+</div>
+
+---
+
+## Table of Contents
+
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Installation & Setup](#installation-&-Setup)
+
+---
+
 
 ## Features
 
