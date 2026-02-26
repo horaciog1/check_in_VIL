@@ -6,10 +6,11 @@ _A lightweight, web-based QR code scanner designed to track attendance (check-in
 
 [![Last Commit](https://img.shields.io/badge/last%20commit-today-brightgreen)](https://github.com/horaciog1/check_in_VIL)
 [![JavaScript](https://img.shields.io/badge/javascript-35.0%25-blue)]()
-[![Languages](https://img.shields.io/badge/languages-6-blue)]()
+[![Languages](https://img.shields.io/badge/languages-4-blue)]()
 
 _Built with the tools and technologies:_
 
+[![Python](https://img.shields.io/badge/Python-3.12%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
 <img src="https://img.shields.io/badge/-JavaScript-yellow?logo=javascript" alt="JavaScript">
 <img src="https://img.shields.io/badge/-GNU%20Bash-brightgreen?logo=gnu-bash" alt="Bash">
 
