@@ -15,6 +15,10 @@ server {
     root /var/www/scan.horacioglz.com;
     index index.html;
 
+    location ~ /\. {
+        deny all;
+    }
+
     location / {
         try_files $uri $uri/ =404;
         
