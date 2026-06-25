@@ -9,6 +9,7 @@ Usage example:
            --out-dir qr_images
 """
 import argparse
+import os
 import pathlib
 import textwrap
 
@@ -105,9 +106,11 @@ def main(xlsx_path: pathlib.Path,
         if not uid:
             continue
 
+        safe_uid = os.path.basename(uid)
+
         img = generate_qr_with_labels(uid, name, font=font)
-        img.save(out_dir / f"{uid}.png")
-        print(f"✔️  {uid}.png")
+        img.save(out_dir / f"{safe_uid}.png")
+        print(f"✔️  {safe_uid}.png")
 
 # ──────────────────────────────────────────────────────────
 if __name__ == "__main__":
