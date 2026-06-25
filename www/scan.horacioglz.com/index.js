@@ -97,12 +97,18 @@ function onScanSuccess(decodedText) {
     // Play corresponding sound
     playModeSound();
 
+    const studentId = decodedText.trim();
+    if (!/^[a-zA-Z0-9_-]{1,100}$/.test(studentId)) {
+        console.error("Invalid QR code data format.");
+        return;
+    }
+
     // show persistent "processing..." red
     document.body.style.background = '#ff3a3a';
 
     //  build query string for a GET 
     const qs = new URLSearchParams({
-        student_id: decodedText.trim(),
+        student_id: studentId,
         type: mode,
         // use GMT-6 timestamp instead of UTC
         timestamp: getGMT6Timestamp(),
