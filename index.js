@@ -151,7 +151,8 @@ async function startScanner() {
         // Try to find the environment-facing (rear) camera
         let selectedDeviceId = devices[0].deviceId; // fallback
         for (const device of devices) {
-            if (device.label.toLowerCase().includes('back') || device.label.toLowerCase().includes('rear') || device.label.toLowerCase().includes('environment')) {
+            const label = device.label.toLowerCase();
+            if (label.includes('back') || label.includes('rear') || label.includes('environment')) {
                 selectedDeviceId = device.deviceId;
                 break;
             }
