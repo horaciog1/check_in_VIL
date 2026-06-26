@@ -21,7 +21,6 @@ function getGMT6Timestamp() {
 }
 
 let mode = null;
-let html5QrCode;
 let lastScannedText = null;
 let lastScannedTime = 0;
 const scanSound = new Audio('check-in.wav');
