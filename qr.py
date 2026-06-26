@@ -99,9 +99,9 @@ def main(xlsx_path: pathlib.Path,
     font = ImageFont.load_default()
 
     # Generate one image per *row* (allows duplicate IDs if needed)
-    for idx, row in df[[name_col, id_col]].dropna().iterrows():
-        name = str(row[name_col]).strip()
-        uid  = str(row[id_col]).strip()
+    for row in df[[name_col, id_col]].dropna().itertuples(index=False, name=None):
+        name = str(row[0]).strip()
+        uid  = str(row[1]).strip()
 
         if not uid:
             continue
