@@ -51,7 +51,7 @@ function getModeLabel(m) {
 function setMode(m) {
     mode = m;
     setStatus(`Mode: ${getModeLabel(m)}`);
-    flashBackground('#ecb3cb');
+    flashBackground('rgba(99, 102, 241, 0.35)');
 
     document.querySelectorAll('[data-mode]').forEach(b => {
         b.classList.toggle('active', b.dataset.mode === m);
