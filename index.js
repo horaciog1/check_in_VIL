@@ -120,12 +120,14 @@ function onScanSuccess(decodedText) {
             const label = getModeLabel(mode);
             setStatus(`${label} — Sent!`);
             setTimeout(() => setStatus(`Mode: ${label}`), STATUS_RESET_MS);
+            document.body.style.background = '';
             flashBackground('#86f265');
             navigator.vibrate?.(250);
         })
         .catch(err => {
             console.error(err);
             setStatus('Network error — check connection');
+            document.body.style.background = '';
             flashBackground('#ff5252');
             navigator.vibrate?.([150, 60, 150]);
         });
