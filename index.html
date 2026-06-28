@@ -3,71 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Summer Camp Attendance</title>
+    <title>Camp Scanner — VILSA</title>
 
-    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-
-    <!-- Stylesheet -->
     <link rel="stylesheet" href="style.css">
-
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <script src="https://unpkg.com/@zxing/library@0.23.0/umd/index.min.js"
             integrity="sha384-0ASr5PEWAMtTnWsn0PzKmioHVDA4+QqFiJr94io/0DCrGP6E1gRAmbO6O8y5WZW9"
             crossorigin="anonymous"></script>
-
 </head>
 <body>
-<div class="main-container">
-    <div class="card" id="uiCard">
-        <p class="eyebrow">VILSA Summer Program</p>
-        <h1>Camp Scanner</h1>
-        <div id="status" role="status" aria-live="polite">Tap <strong>Start</strong>, then choose a mode</div>
-        <button type="button" id="startBtn" class="btn primary">Start scanning</button>
 
-        <div class="form-links" id="formLinks">
-            <span class="form-links-label">Quick Links</span>
-            <div class="form-links-row">
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfl4MP3GXaEk_krlFC-ymEjR7e4ztuZWX3ov7q-TOT1U-wsrA/viewform"
-                   target="_blank" rel="noopener"
-                   class="btn btn-link"
-                   aria-label="Incident Report form (opens in new tab)">Incident Report</a>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfevTs_JrwfxEeV7Lnlwq7duwWzkRarvR_MBNb6jry2w2SarQ/viewform"
-                   target="_blank" rel="noopener"
-                   class="btn btn-link"
-                   aria-label="VILSA Tech Ticket form (opens in new tab)">Tech Ticket</a>
+    <!-- Ambient background blobs -->
+    <div class="blob blob-1" aria-hidden="true"></div>
+    <div class="blob blob-2" aria-hidden="true"></div>
+    <div class="blob blob-3" aria-hidden="true"></div>
+
+    <div class="main-container">
+        <div class="card" id="uiCard">
+
+            <p class="eyebrow">VILSA Summer Program</p>
+            <h1>Camp Scanner</h1>
+
+            <div id="status" role="status" aria-live="polite">
+                Tap <strong>Start</strong>, then choose a mode
             </div>
+
+            <button type="button" id="startBtn" class="btn btn-primary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg>
+                Start scanning
+            </button>
+
+            <div class="form-links" id="formLinks">
+                <span class="form-links-label">Quick Links</span>
+                <div class="form-links-row">
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfl4MP3GXaEk_krlFC-ymEjR7e4ztuZWX3ov7q-TOT1U-wsrA/viewform"
+                       target="_blank" rel="noopener"
+                       class="btn btn-link"
+                       aria-label="Incident Report form (opens in new tab)">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+                        Incident Report
+                    </a>
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfevTs_JrwfxEeV7Lnlwq7duwWzkRarvR_MBNb6jry2w2SarQ/viewform"
+                       target="_blank" rel="noopener"
+                       class="btn btn-link"
+                       aria-label="VILSA Tech Ticket form (opens in new tab)">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                        Tech Ticket
+                    </a>
+                </div>
+            </div>
+
+            <div class="controls-section" style="display:none">
+                <div class="mode-grid">
+                    <button type="button" class="btn btn-mode" data-mode="checkin">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20,6 9,17 4,12"/></svg>
+                        Check In
+                    </button>
+                    <button type="button" class="btn btn-mode" data-mode="checkout">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg>
+                        Check Out
+                    </button>
+                    <button type="button" class="btn btn-mode" data-mode="points">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+                        +1 Point
+                    </button>
+                    <button type="button" class="btn btn-mode" data-mode="nopoints">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                        No Points
+                    </button>
+                </div>
+                <button type="button" id="backBtn" class="btn btn-back" aria-label="Back to home">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12,19 5,12 12,5"/></svg>
+                    Back
+                </button>
+            </div>
+
         </div>
 
-        <div class="controls-section" style="display:none">
-            <div class="controls">
-                <button type="button" class="btn" data-mode="checkin">Check In</button>
-                <button type="button" class="btn" data-mode="checkout">Check Out</button>
+        <!-- Scanner feed -->
+        <div id="reader" style="display:none">
+            <div class="viewfinder">
+                <!-- autoplay required: element is a camera viewfinder, not media playback -->
+                <video id="video" autoplay muted playsinline></video>
+                <div class="corner tl"></div>
+                <div class="corner tr"></div>
+                <div class="corner bl"></div>
+                <div class="corner br"></div>
+                <div class="scan-line"></div>
             </div>
-            <div class="controls">
-                <button type="button" class="btn" data-mode="points">+1 Point</button>
-                <button type="button" class="btn" data-mode="nopoints">No Points</button>
-            </div>
-            <button type="button" id="backBtn" class="btn btn-back" aria-label="Back to home">&#8592; Back</button>
         </div>
     </div>
 
-    <!-- Scanner feed -->
-    <div id="reader" style="display:none">
-        <div class="viewfinder">
-            <!-- autoplay required: element is a camera viewfinder, not media playback -->
-            <video id="video" autoplay muted playsinline></video>
-            <div class="corner tl"></div>
-            <div class="corner tr"></div>
-            <div class="corner bl"></div>
-            <div class="corner br"></div>
-            <div class="scan-line"></div>
-        </div>
-    </div>
-</div>
-
-<script src="index.js" defer></script>
+    <script src="index.js" defer></script>
 </body>
 </html>
