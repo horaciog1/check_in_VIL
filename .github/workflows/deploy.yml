@@ -34,6 +34,11 @@ jobs:
           cp index.html index.js style.css check-in.wav points.wav favicon.ico /var/www/scan.horacioglz.com/
           sed -i "s|const ENDPOINT = \"\"|const ENDPOINT = \"${GAS_ENDPOINT}\"|" /var/www/scan.horacioglz.com/index.js
 
+      - name: Deploy nginx config
+        run: |
+          sudo tee /etc/nginx/sites-available/scan.horacioglz.com < nginx/sites-enabled/scan.horacioglz.com > /dev/null
+          sudo nginx -t
+
       - name: Reload Nginx
         run: sudo systemctl reload nginx
 
