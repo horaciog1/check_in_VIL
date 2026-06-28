@@ -21,20 +21,20 @@ server {
 
     location / {
         try_files $uri $uri/ =404;
-        
-	add_header Content-Security-Policy "
+
+        add_header Content-Security-Policy "
              default-src 'self';
              script-src 'self' https://unpkg.com https://script.google.com https://script.googleusercontent.com;
              connect-src 'self' https://script.google.com https://script.googleusercontent.com;
              style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
              style-src-elem 'self' https://fonts.googleapis.com;
              font-src 'self' https://fonts.gstatic.com;
+             media-src 'self';
         " always;
 
-        # Optional other security headers
         add_header X-Content-Type-Options "nosniff" always;
         add_header X-Frame-Options "DENY" always;
         add_header X-XSS-Protection "1; mode=block" always;
-    }	       
+    }
 
 }

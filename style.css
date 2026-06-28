@@ -15,7 +15,7 @@ html, body {
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  width: 100%;              /* fill the card’s width */
+  width: 100%;
 }
 
 
@@ -65,18 +65,17 @@ h1 {
 /* 2) Each .controls row is a single flex line of exactly two buttons */
 .controls {
   display: flex;
-  justify-content: space-between;  /* push buttons to the edges */
+  justify-content: space-between;
   width: 100%;
-  max-width: 300px;                /* or whatever fits in your 400px-wide card */
+  max-width: 300px;
   margin-bottom: 1rem;
-  /* remove flex-wrap so they never wrap */
 }
 
 /* 3) Make each button share that space equally */
 .controls .btn {
-  flex: 1;                 /* each takes 50% of the row */
-  margin: 0 0.5rem;        /* small gutter between them */
-  min-width: 0;            /* allow them to shrink if needed */
+  flex: 1;
+  margin: 0 0.5rem;
+  min-width: 0;
 }
 
 .btn {
@@ -90,7 +89,7 @@ h1 {
     border: 1px solid rgba(255, 255, 255, 0.35);
     border-radius: 0.75rem;
     cursor: pointer;
-    transition: transform 0.15s ease, background 0.15s ease;
+    transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
 }
 
 .btn:hover {
@@ -100,6 +99,18 @@ h1 {
 
 .btn:active {
     transform: translateY(0);
+}
+
+.btn:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.9);
+    outline-offset: 3px;
+}
+
+/* Active mode button */
+.btn.active {
+    background: rgba(255, 255, 255, 0.35);
+    border-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4);
 }
 
 /* === Status text === */
@@ -113,8 +124,9 @@ h1 {
 
 /* === QR reader box === */
 #reader {
-    width: 320px;
-    height: 320px;
+    width: min(320px, 90vw);
+    aspect-ratio: 1 / 1;
+    height: auto;
     margin: 1rem auto;
     display: flex;
     align-items: center;

@@ -5,18 +5,17 @@ const ENDPOINT = "";
 
 /* =============== */
 
+const FLASH_DURATION_MS = 600;
+const DEDUP_WINDOW_MS   = 3000;
+const STATUS_RESET_MS   = 2000;
 
 /**
  * Return an ISO8601 timestamp in GMT-6 by subtracting 6h from UTC.
  * e.g. "2025-05-28T14:36:09.397-06:00"
  */
 function getGMT6Timestamp() {
-  // subtract 6 hours (6*60*60*1000 ms) from the UTC-based clock
   const msOffset = 6 * 60 * 60 * 1000;
-  // Make a Date at UTC now minus 6h:
   const gmt6 = new Date(Date.now() - msOffset);
-  // toISOString() gives "YYYY-MM-DDTHH:mm:ss.sssZ"
-  // swap the trailing "Z" for "-06:00"
   return gmt6.toISOString().replace(/Z$/, "-06:00");
 }
 
@@ -24,27 +23,39 @@ let mode = null;
 let lastScannedText = null;
 let lastScannedTime = 0;
 let codeReader = null;
-const scanSound = new Audio('check-in.wav');
+
+const scanSound   = new Audio('check-in.wav');
 const pointsSound = new Audio('points.wav');
 scanSound.preload   = 'auto';
 pointsSound.preload = 'auto';
 
+function getStatusEl() {
+    return document.getElementById('status');
+}
+
+function setStatus(text) {
+    getStatusEl().innerText = text;
+}
+
+function getModeLabel(m) {
+    if      (m === 'checkin')  return 'Check In';
+    else if (m === 'checkout') return 'Check Out';
+    else if (m === 'points')   return '+1 Point';
+    else if (m === 'nopoints') return 'No Points';
+    return m;
+}
+
 /**
- * Sets the operational mode and updates the status display accordingly.
- *
- * @param {string} m - The mode to set. Expected values are 'checkin', 'checkout', or other strings representing custom modes.
- * @return {void} This method does not return a value.
+ * Sets the operational mode, updates status display, and highlights the active button.
  */
 function setMode(m) {
     mode = m;
-    let pretty;
-    if      (m === 'checkin')  pretty = 'Check In';
-    else if (m === 'checkout') pretty = 'Check Out';
-    else if (m === 'points')   pretty = '+1 Point';
-    else if (m === 'nopoints') pretty = 'No Points';
-    else                        pretty = m;
-    document.getElementById('status').innerText = `Mode: ${pretty}`;
+    setStatus(`Mode: ${getModeLabel(m)}`);
     flashBackground('#ecb3cb');
+
+    document.querySelectorAll('[data-mode]').forEach(b => {
+        b.classList.toggle('active', b.dataset.mode === m);
+    });
 }
 
 function playModeSound() {
@@ -58,84 +69,70 @@ function playModeSound() {
 }
 
 /**
- * Temporarily flashes the background of the document's body with the given color.
- *
- * @param {string} color - The color to flash the background with. It should be a valid CSS color value.
- * @return {void} This function does not return a value.
+ * Temporarily flashes the background with the given color.
  */
 function flashBackground(color) {
     const original = document.body.style.background;
     document.body.style.background = color;
-    setTimeout(() => (document.body.style.background = ''), 600);
+    setTimeout(() => (document.body.style.background = original), FLASH_DURATION_MS);
 }
 
 /**
- * Processes the scanned data and triggers appropriate actions based on the scanned result.
- *
- * @param {string} decodedText - The text decoded from the scanned input.
- * @return {void} - This function does not return any value.
+ * Processes the scanned data and triggers appropriate actions.
  */
 function onScanSuccess(decodedText) {
     if (!mode) {
+        setStatus('Select a mode first');
         flashBackground('#ff5252');
+        navigator.vibrate?.([80, 40, 80]);
         return;
     }
 
-
-    // ignore duplicates for 3s == 3000
     const now = Date.now();
-    if (decodedText === lastScannedText && (now - lastScannedTime) < 3000) {
-      return;
+    if (decodedText === lastScannedText && (now - lastScannedTime) < DEDUP_WINDOW_MS) {
+        return;
     }
     lastScannedText = decodedText;
     lastScannedTime = now;
 
-    // play the check-in sound
-    // scanSound.currentTime = 0;
-    // scanSound.play().catch(console.warn);
-
-    // Play corresponding sound
     playModeSound();
 
     const studentId = decodedText.trim();
     if (!/^[a-zA-Z0-9_-]{1,100}$/.test(studentId)) {
-        console.error("Invalid QR code data format.");
+        setStatus('Invalid QR code — try again');
+        flashBackground('#ff5252');
+        navigator.vibrate?.([80, 40, 80]);
         return;
     }
 
-    // show persistent "processing..." red
+    setStatus('Sending…');
     document.body.style.background = '#ff3a3a';
 
-    //  build query string for a GET 
     const qs = new URLSearchParams({
         student_id: studentId,
         type: mode,
-        // use GMT-6 timestamp instead of UTC
         timestamp: getGMT6Timestamp(),
         counsellor_id: 'unset'
     });
 
-    fetch(`${ENDPOINT}?${qs}`, {  // ENDPOINT is the …/exec
-        mode: 'no-cors'             // <- bypass CORS check
-    })
-
+    fetch(`${ENDPOINT}?${qs}`, { mode: 'no-cors' })
         .then(() => {
-            // done processing -> flash green then revert
+            const label = getModeLabel(mode);
+            setStatus(`${label} — Sent!`);
+            setTimeout(() => setStatus(`Mode: ${label}`), STATUS_RESET_MS);
             flashBackground('#86f265');
+            navigator.vibrate?.(100);
         })
-
         .catch(err => {
             console.error(err);
-            flashBackground('#ff5252');           // network failure 
+            setStatus('Network error — check connection');
+            flashBackground('#ff5252');
+            navigator.vibrate?.([80, 40, 80]);
         });
 }
 
 /**
- * Initializes a QR code scanner using the ZXing library and attempts to detect and decode QR codes from a video input device.
- *
- * The function tries to find and use the environment-facing (rear) camera to detect QR codes. If no compatible device is available, it alerts the user.
- *
- * @return {Promise<void>} A promise that resolves when the scanner starts successfully, or logs an error if initialization fails.
+ * Stops the active QR scanner and releases the camera.
  */
 function stopScanner() {
     if (codeReader) {
@@ -149,19 +146,20 @@ function stopScanner() {
     }
 }
 
+/**
+ * Initializes the ZXing QR scanner using the rear-facing camera.
+ */
 async function startScanner() {
-    console.log("Initializing ZXing scanner...");
     codeReader = new ZXing.BrowserQRCodeReader();
 
     try {
         const devices = await codeReader.getVideoInputDevices();
         if (!devices.length) {
-            alert("No camera found.");
+            setStatus('No camera found');
             return;
         }
 
-        // Try to find the environment-facing (rear) camera
-        let selectedDeviceId = devices[0].deviceId; // fallback
+        let selectedDeviceId = devices[0].deviceId;
         for (const device of devices) {
             const label = device.label.toLowerCase();
             if (label.includes('back') || label.includes('rear') || label.includes('environment')) {
@@ -170,28 +168,22 @@ async function startScanner() {
             }
         }
 
-        console.log("Using camera:", selectedDeviceId);
-
         codeReader.decodeFromVideoDevice(
             selectedDeviceId,
             'video',
             (result, err) => {
                 if (result) {
-                    const text = result.getText();
-                    console.log("QR code detected:", text);
-                    onScanSuccess(text);
+                    onScanSuccess(result.getText());
                 }
-
                 if (err && !(err instanceof ZXing.NotFoundException)) {
                     console.warn("ZXing error:", err);
                 }
             }
         );
 
-
     } catch (error) {
         console.error("ZXing scanner error:", error);
-        alert("Failed to start QR scanner: " + error.message);
+        setStatus('Camera access denied — check permissions');
     }
 }
 
@@ -224,6 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
         formLinks.style.display        = '';
         startBtn.disabled              = false;
         startBtn.style.display         = '';
+        document.querySelectorAll('[data-mode]').forEach(b => b.classList.remove('active'));
         statusEl.innerHTML             = 'Tap <strong>Start</strong>, then choose a mode';
     });
 
