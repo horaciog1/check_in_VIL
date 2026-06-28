@@ -1,0 +1,40 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    name: Validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check JS syntax
+        run: node --check index.js
+
+      - name: Validate HTML
+        run: npx --yes html-validate index.html
+
+  deploy:
+    name: Deploy to production
+    needs: lint
+    runs-on: self-hosted
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy files
+        run: cp index.html index.js style.css check-in.wav points.wav favicon.ico /var/www/scan.horacioglz.com/
+
+      - name: Reload Nginx
+        run: sudo systemctl reload nginx
+
+      - name: Smoke test
+        run: |
+          sleep 2
+          curl -f -s -o /dev/null -w "%{http_code}" http://localhost/ | grep -q "301"
+          echo "Site is up"
