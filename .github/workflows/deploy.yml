@@ -28,7 +28,11 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Deploy files
-        run: cp index.html index.js style.css check-in.wav points.wav favicon.ico /var/www/scan.horacioglz.com/
+        env:
+          GAS_ENDPOINT: ${{ secrets.GAS_ENDPOINT }}
+        run: |
+          cp index.html index.js style.css check-in.wav points.wav favicon.ico /var/www/scan.horacioglz.com/
+          sed -i "s|const ENDPOINT = \"\"|const ENDPOINT = \"${GAS_ENDPOINT}\"|" /var/www/scan.horacioglz.com/index.js
 
       - name: Reload Nginx
         run: sudo systemctl reload nginx
