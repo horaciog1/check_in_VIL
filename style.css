@@ -128,3 +128,44 @@ h1 {
     border-radius: 1rem;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
 }
+
+/* === Form links (quick links section) === */
+.form-links {
+    margin-top: 1.25rem;
+    width: 100%;
+}
+
+.form-links-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 0.6rem;
+}
+
+.form-links-row {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+}
+
+.btn-link {
+    text-decoration: none;
+    font-size: 0.85rem;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    flex: 1;
+    max-width: 160px;
+}
+
+/* === Back button === */
+.btn-back {
+    margin-top: 0.25rem;
+    font-size: 0.85rem;
+    background: rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    width: 100%;
+    max-width: 300px;
+}

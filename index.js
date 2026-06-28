@@ -23,6 +23,7 @@ function getGMT6Timestamp() {
 let mode = null;
 let lastScannedText = null;
 let lastScannedTime = 0;
+let codeReader = null;
 const scanSound = new Audio('check-in.wav');
 const pointsSound = new Audio('points.wav');
 scanSound.preload   = 'auto';
@@ -136,9 +137,21 @@ function onScanSuccess(decodedText) {
  *
  * @return {Promise<void>} A promise that resolves when the scanner starts successfully, or logs an error if initialization fails.
  */
+function stopScanner() {
+    if (codeReader) {
+        codeReader.reset();
+        codeReader = null;
+    }
+    const video = document.getElementById('video');
+    if (video && video.srcObject) {
+        video.srcObject.getTracks().forEach(t => t.stop());
+        video.srcObject = null;
+    }
+}
+
 async function startScanner() {
     console.log("Initializing ZXing scanner...");
-    const codeReader = new ZXing.BrowserQRCodeReader();
+    codeReader = new ZXing.BrowserQRCodeReader();
 
     try {
         const devices = await codeReader.getVideoInputDevices();
@@ -186,15 +199,32 @@ async function startScanner() {
 /* ───────────────────────── user-gesture wiring ───────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
     const startBtn        = document.getElementById('startBtn');
+    const backBtn         = document.getElementById('backBtn');
     const controlsSection = document.querySelector('.controls-section');
+    const formLinks       = document.getElementById('formLinks');
     const readerBox       = document.getElementById('reader');
+    const statusEl        = document.getElementById('status');
 
     startBtn.addEventListener('click', async () => {
         startBtn.disabled = true;
-        readerBox.style.display       = 'block'; 
+        formLinks.style.display       = 'none';
+        readerBox.style.display       = 'block';
         await startScanner();
         startBtn.style.display        = 'none';
         controlsSection.style.display = 'flex';
+    });
+
+    backBtn.addEventListener('click', () => {
+        stopScanner();
+        mode = null;
+        lastScannedText = null;
+        document.body.style.background = '';
+        readerBox.style.display        = 'none';
+        controlsSection.style.display  = 'none';
+        formLinks.style.display        = '';
+        startBtn.disabled              = false;
+        startBtn.style.display         = '';
+        statusEl.innerHTML             = 'Tap <strong>Start</strong>, then choose a mode';
     });
 
     document.querySelectorAll('[data-mode]')
