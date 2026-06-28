@@ -37,6 +37,7 @@ jobs:
       - name: Deploy nginx config
         run: |
           sudo tee /etc/nginx/sites-available/scan.horacioglz.com < nginx/sites-enabled/scan.horacioglz.com > /dev/null
+          sudo tee /etc/nginx/conf.d/rate-limit.conf < nginx/conf.d/rate-limit.conf > /dev/null
           sudo nginx -t
 
       - name: Reload Nginx

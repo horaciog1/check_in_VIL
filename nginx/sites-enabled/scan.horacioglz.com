@@ -29,6 +29,9 @@ server {
     location / {
         try_files $uri $uri/ =404;
 
+        # Rate limiting — defined in conf.d/rate-limit.conf
+        limit_req zone=scan burst=10 nodelay;
+
         # Prevent clickjacking (CSP frame-ancestors is the modern way; X-Frame-Options for legacy)
         add_header X-Frame-Options "DENY" always;
 
