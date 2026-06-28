@@ -84,7 +84,7 @@ function onScanSuccess(decodedText) {
     if (!mode) {
         setStatus('Select a mode first');
         flashBackground('#ff5252');
-        navigator.vibrate?.([80, 40, 80]);
+        navigator.vibrate?.([150, 60, 150]);
         return;
     }
 
@@ -101,7 +101,7 @@ function onScanSuccess(decodedText) {
     if (!/^[a-zA-Z0-9_-]{1,100}$/.test(studentId)) {
         setStatus('Invalid QR code — try again');
         flashBackground('#ff5252');
-        navigator.vibrate?.([80, 40, 80]);
+        navigator.vibrate?.([150, 60, 150]);
         return;
     }
 
@@ -121,13 +121,13 @@ function onScanSuccess(decodedText) {
             setStatus(`${label} — Sent!`);
             setTimeout(() => setStatus(`Mode: ${label}`), STATUS_RESET_MS);
             flashBackground('#86f265');
-            navigator.vibrate?.(100);
+            navigator.vibrate?.(250);
         })
         .catch(err => {
             console.error(err);
             setStatus('Network error — check connection');
             flashBackground('#ff5252');
-            navigator.vibrate?.([80, 40, 80]);
+            navigator.vibrate?.([150, 60, 150]);
         });
 }
 

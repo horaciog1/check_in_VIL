@@ -124,10 +124,10 @@ h1 {
 
 /* === QR reader box === */
 #reader {
-    width: min(320px, 90vw);
+    width: min(240px, 75vw);
     aspect-ratio: 1 / 1;
     height: auto;
-    margin: 1rem auto;
+    margin: 0.5rem auto;
     display: flex;
     align-items: center;
     justify-content: center;
