@@ -73,7 +73,7 @@ function handle(body) {
       // Slot 3: 12:10–14:40   Slot 4: 14:40+
       // Use server's current time (UTC) formatted in camp timezone — avoids
       // Rhino misreading the frontend's ISO offset string as UTC.
-      const CAMP_TZ  = 'America/Chicago';
+      const CAMP_TZ  = 'America/El_Paso';
       const now      = new Date();
       const h  = parseInt(Utilities.formatDate(now, CAMP_TZ, 'H'), 10);
       const m  = parseInt(Utilities.formatDate(now, CAMP_TZ, 'm'), 10);
