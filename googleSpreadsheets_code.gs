@@ -36,13 +36,15 @@ function handle(body) {
       return out({status:'error', message:'No column for date '+todayLabel});
     }
 
-    // 4) Compute the 4-column group under that date:
-    //    C=checkin, D=checkout, E=firstPoint, F=secondPoint
-    const groupStart     = idx0 + 1;   // 1-based (C=3, etc)
-    const checkinCol     = groupStart;
-    const checkoutCol    = groupStart + 1;
-    const firstPointCol  = groupStart + 2;
-    const secondPointCol = groupStart + 3;
+    // 4) Compute the 6-column group under that date:
+    //    checkin, checkout, firstPoint, secondPoint, thirdPoint, fourthPoint
+    const groupStart      = idx0 + 1;   // 1-based
+    const checkinCol      = groupStart;
+    const checkoutCol     = groupStart + 1;
+    const firstPointCol   = groupStart + 2;
+    const secondPointCol  = groupStart + 3;
+    const thirdPointCol   = groupStart + 4;
+    const fourthPointCol  = groupStart + 5;
 
     // 5) Find the student's row (IDs in A3:A)
     const ids = sheet
@@ -66,15 +68,21 @@ function handle(body) {
       }
 
     } else {
-      // points / nopoints -> 1st or 2nd point slot
+      // points / nopoints -> pick slot by time of day
+      // Slot 1: before 10:40  Slot 2: 10:40–12:10
+      // Slot 3: 12:10–14:40   Slot 4: 14:40+
       const ts = body.timestamp ? new Date(body.timestamp) : new Date();
-      // get hour/minute in your TZ
-      const h = parseInt(Utilities.formatDate(ts, TZ, 'H'), 10);
-      const m = parseInt(Utilities.formatDate(ts, TZ, 'm'), 10);
-      const isFirst = (h < 12 || (h === 12 && m < 30));
+      const h  = parseInt(Utilities.formatDate(ts, TZ, 'H'), 10);
+      const m  = parseInt(Utilities.formatDate(ts, TZ, 'm'), 10);
+      const totalMin = h * 60 + m;
 
-      const targetCol = isFirst ? firstPointCol : secondPointCol;
-      const cell      = sheet.getRange(rowNum, targetCol);
+      let targetCol;
+      if      (totalMin < 10 * 60 + 40) targetCol = firstPointCol;
+      else if (totalMin < 12 * 60 + 10) targetCol = secondPointCol;
+      else if (totalMin < 14 * 60 + 40) targetCol = thirdPointCol;
+      else                              targetCol = fourthPointCol;
+
+      const cell = sheet.getRange(rowNum, targetCol);
       if (!cell.getValue()) {
         cell.setValue(body.type === 'points' ? 1 : 0);
       }
