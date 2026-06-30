@@ -71,9 +71,12 @@ function handle(body) {
       // points / nopoints -> pick slot by time of day
       // Slot 1: before 10:40  Slot 2: 10:40–12:10
       // Slot 3: 12:10–14:40   Slot 4: 14:40+
-      const ts = body.timestamp ? new Date(body.timestamp) : new Date();
-      const h  = parseInt(Utilities.formatDate(ts, TZ, 'H'), 10);
-      const m  = parseInt(Utilities.formatDate(ts, TZ, 'm'), 10);
+      // Use server's current time (UTC) formatted in camp timezone — avoids
+      // Rhino misreading the frontend's ISO offset string as UTC.
+      const CAMP_TZ  = 'America/Chicago';
+      const now      = new Date();
+      const h  = parseInt(Utilities.formatDate(now, CAMP_TZ, 'H'), 10);
+      const m  = parseInt(Utilities.formatDate(now, CAMP_TZ, 'm'), 10);
       const totalMin = h * 60 + m;
 
       let targetCol;
