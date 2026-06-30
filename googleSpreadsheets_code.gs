@@ -71,9 +71,19 @@ function handle(body) {
       // points / nopoints -> pick slot by time of day
       // Slot 1: before 10:40  Slot 2: 10:40–12:10
       // Slot 3: 12:10–14:40   Slot 4: 14:40+
-      const ts = body.timestamp ? new Date(body.timestamp) : new Date();
-      const h  = parseInt(Utilities.formatDate(ts, TZ, 'H'), 10);
-      const m  = parseInt(Utilities.formatDate(ts, TZ, 'm'), 10);
+      // Prefer the device's local wall-clock time (sent as hour/minute) so the
+      // slot never depends on the script project's timezone. Fall back to the
+      // timestamp only if those params are missing.
+      let h, m;
+      if (body.hour !== undefined && body.hour !== '' &&
+          body.minute !== undefined && body.minute !== '') {
+        h = parseInt(body.hour, 10);
+        m = parseInt(body.minute, 10);
+      } else {
+        const ts = body.timestamp ? new Date(body.timestamp) : new Date();
+        h = parseInt(Utilities.formatDate(ts, TZ, 'H'), 10);
+        m = parseInt(Utilities.formatDate(ts, TZ, 'm'), 10);
+      }
       const totalMin = h * 60 + m;
 
       let targetCol;

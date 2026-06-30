@@ -19,6 +19,16 @@ function getGMT6Timestamp() {
   return gmt6.toISOString().replace(/Z$/, "-06:00");
 }
 
+/**
+ * Return the device's local wall-clock hour and minute.
+ * The scanner runs on a tablet/phone in El Paso set to local time, so this is
+ * the true camp time — sent directly so the backend needs no timezone math.
+ */
+function getLocalHM() {
+  const d = new Date();
+  return { hour: d.getHours(), minute: d.getMinutes() };
+}
+
 let mode = null;
 let lastScannedText = null;
 let lastScannedTime = 0;
@@ -108,10 +118,13 @@ function onScanSuccess(decodedText) {
     setStatus('Sending…');
     document.body.style.background = '#ff3a3a';
 
+    const { hour, minute } = getLocalHM();
     const qs = new URLSearchParams({
         student_id: studentId,
         type: mode,
         timestamp: getGMT6Timestamp(),
+        hour: hour,
+        minute: minute,
         counsellor_id: 'unset'
     });
 
