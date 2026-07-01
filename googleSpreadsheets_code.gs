@@ -8,10 +8,12 @@ const TZ           = Session.getScriptTimeZone();
 // Shared row-writing logic
 // ──────────────────────────────────────────
 function handle(body) {
+  // NOTE: Apps Script TextOutput has no setHeader(); calling it throws.
+  // CORS headers can't be set on web-app responses anyway, and the frontend
+  // uses mode:'no-cors' so it never reads the body.
   const out = c => ContentService
     .createTextOutput(JSON.stringify(c))
-    .setMimeType(ContentService.MimeType.JSON)
-    .setHeader('Access-Control-Allow-Origin','*');
+    .setMimeType(ContentService.MimeType.JSON);
 
   try {
     // 1) Only accept these modes:
@@ -110,9 +112,3 @@ function handle(body) {
 // ──────────────────────────────────────────
 function doGet(e)    { return handle(e.parameter); }
 function doPost(e)   { return handle(JSON.parse(e.postData.contents)); }
-function doOptions() {
-  return ContentService.createTextOutput('')
-    .setHeader('Access-Control-Allow-Origin','*')
-    .setHeader('Access-Control-Allow-Methods','GET, POST, OPTIONS')
-    .setHeader('Access-Control-Allow-Headers','Content-Type');
-}
